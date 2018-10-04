@@ -4,8 +4,8 @@ const bodyParser = require('body-parser');
 const app = express();
 
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
-const verificationController = require(‘./controllers/verification’);
-const messageWebhookController = require(‘./controllers/messageWebhook’);
+const verificationController = require('./controllers/verification');
+const messageWebhookController = require('./controllers/messageWebhook');
 
 app.get('/', (req, res) => res.send('Hello World!'))
 app.get('/verify', verificationController);
