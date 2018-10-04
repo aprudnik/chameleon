@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/', (req, res) => res.send('Hello World!'))
 app.get('/verify', verificationController);
 app.post('/verify', messageWebhookController);
-app.post('/discord', discordBot);
+
+discordBot
 
 app.listen(port, () => console.log(`Webhook server is listening, port ${port}`));
