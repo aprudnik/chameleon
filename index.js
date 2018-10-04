@@ -9,7 +9,7 @@ const messageWebhookController = require('./controllers/messageWebhook');
 
 app.get('/', (req, res) => res.send('Hello World!'))
 app.get('/verify', verificationController);
-app.post('/', messageWebhookController);
+app.post('/verify', messageWebhookController);
 
 
 
