@@ -5,7 +5,7 @@
     "start": "node index.js"
   },
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aprudnik/chameleon.git"
