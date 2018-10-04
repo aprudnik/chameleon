@@ -11,8 +11,12 @@ const discordBot = require('./controllers/discord')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.get('/', (req, res) => res.send('Hello World!'))
 app.get('/verify', verificationController);
+app.post('/slack', verificationController);
 app.post('/verify', messageWebhookController);
 
 discordBot
