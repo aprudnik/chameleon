@@ -1,4 +1,5 @@
 const processFacebookMessage = require('../helpers/processFacebookMessage');
+var discordMessage = require('./discord')
 
 module.exports = (req, res) => {
     console.log(JSON.stringify(req.body))
@@ -6,7 +7,8 @@ module.exports = (req, res) => {
         req.body.entry.forEach(entry => {
             entry.messaging.forEach(event => {
                 if (event.message && event.message.text) {
-                    processFacebookMessage(event);
+                    //processFacebookMessage(event);
+                    discordMessage(event.message.text)
                 }
             });
         });
