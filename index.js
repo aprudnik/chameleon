@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => res.send('Hello World!'))
 app.get('/verify', verificationController);
-app.get('/slack', verificationController);
+app.post('/slack', verificationController);
 app.post('/verify', messageWebhookController);
 
 
