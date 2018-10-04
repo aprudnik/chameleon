@@ -1,4 +1,25 @@
 {
-    "name" : "BTC",
-    "version" : "1.0.0"
+  "name": "BTC",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "description": "",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aprudnik/chameleon.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aprudnik/chameleon/issues"
+  },
+  "homepage": "https://github.com/aprudnik/chameleon#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3"
+  },
+  "devDependencies": {}
 }
