@@ -22,10 +22,11 @@
     "discord.io": "^2.5.3",
     "discord.js": "^11.4.2",
     "express": "^4.16.3",
-    "wilson": "0.0.5",
-    "winston": "^3.1.0",
     "request": "^2.88.0",
-    "save": "^2.3.2"
+    "save": "^2.3.2",
+    "watson-developer-cloud": "^3.11.1",
+    "wilson": "0.0.5",
+    "winston": "^3.1.0"
   },
   "devDependencies": {}
 }
