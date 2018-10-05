@@ -13,8 +13,8 @@ client.on("ready", () => {
 });
     
 client.on("message", (message) => {
-    if (message.content.startsWith("ping")) {
-        watson(message.content,function done(err,callback)
+    if (message.content.startsWith("!")) {
+        watson(message.content.substr(1),function done(err,callback)
                 {
                     message.channel.send(callback);
                 })
