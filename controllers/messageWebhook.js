@@ -8,10 +8,10 @@ module.exports = (req, res) => {
         req.body.entry.forEach(entry => {
             entry.messaging.forEach(event => {
                 if (event.message && event.message.text) {
-                    // discordMessage(event.message.text)
-                    // console.log(watson(event.message.text))
-                    
-                    processFacebookMessage(event.sender.id, watson(event.message.text))
+                    watson(event.message.text,function done(err,callback)
+                    {
+                        processFacebookMessage(event.sender.id, callback)
+                    })
                 }
             });
         });

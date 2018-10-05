@@ -26,14 +26,16 @@ function processResponse(err, response) {
 
   // Display the output from dialog, if any. Assumes a single text response.
   if (response.output.generic.length != 0) {
-      console.log(response.output.generic[0].text)
-      return response.output.generic[0].text
+    // console.log(response.output.generic[0].text)
+    return response.output.generic[0].text
   }
 }
 
-module.exports = (newMessageFromUser) => {
-    service.message({
+module.exports = function(newMessageFromUser,done) {
+     service.message({
         workspace_id: workspace_id,
         input: { text: newMessageFromUser }
-        }, processResponse)
+        }, function(err,response){
+            done(err,processResponse(err,response))
+        })
  };
