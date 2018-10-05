@@ -1,5 +1,5 @@
-
+var discordMessage = require('../controllers/discord')
 
 module.exports = (event) => {
-    console.log(event)
+    discordMessage(event)
  };
