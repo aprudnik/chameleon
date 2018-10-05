@@ -1,4 +1,4 @@
-
+var watson = require('../controllers/watson')
 
 const Discord = require("discord.js");
 
@@ -14,7 +14,12 @@ client.on("ready", () => {
     
 client.on("message", (message) => {
     if (message.content.startsWith("ping")) {
-    message.channel.send("pong!");
+        watson(message.content,function done(err,callback)
+                {
+                    message.channel.send(callback);
+                })
+
+    
     }
 });
     

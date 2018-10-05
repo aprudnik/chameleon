@@ -19,7 +19,7 @@ module.exports = (message) => {
     const text = message.event.text;
     const channel = message.event.channel;
     const user = message.event.user;
-    watson(event.message.text,function done(err,callback)
+    watson(text,function done(err,callback)
                     {
                         sendTextMessage(channel, user, callback);
                     })
