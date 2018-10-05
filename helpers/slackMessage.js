@@ -1,5 +1,6 @@
 var discordMessage = require('../controllers/discord')
 const request = require('request');
+var watson = require('../controllers/watson')
 
 const sendTextMessage = (channel, user, text) => {
     token = "xoxb-448604844673-449223431682-XIZX0GLl04UQT7kFi08erdft"
@@ -18,7 +19,10 @@ module.exports = (message) => {
     const text = message.event.text;
     const channel = message.event.channel;
     const user = message.event.user;
+    watson(event.message.text,function done(err,callback)
+                    {
+                        sendTextMessage(channel, user, callback);
+                    })
     
-    sendTextMessage(channel, user, text);
  };
  
