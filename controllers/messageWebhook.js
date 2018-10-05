@@ -1,5 +1,6 @@
 const processFacebookMessage = require('../helpers/processFacebookMessage');
 var discordMessage = require('./discord')
+var watson = require('./watson')
 
 module.exports = (req, res) => {
     console.log(JSON.stringify(req.body))
@@ -9,6 +10,7 @@ module.exports = (req, res) => {
                 if (event.message && event.message.text) {
                     //processFacebookMessage(event);
                     discordMessage(event.message.text)
+                    watson(event.message.text)
                 }
             });
         });
