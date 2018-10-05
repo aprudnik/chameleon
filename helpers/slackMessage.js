@@ -18,6 +18,6 @@ module.exports = (message) => {
     const channel = message.event.channel;
     const user = message.event.user;
     
-    sendTextMessage(channel, user, text);
+    //sendTextMessage(channel, user, text);
  };
  
