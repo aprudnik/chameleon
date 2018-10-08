@@ -3,6 +3,11 @@ var config = {}
 // active examples :  aws, watson
 config.active = 'aws'
 
+function setActiveBot(bot) {
+    console.log('Changing Active Bot to ' + bot)
+    config.active = bot
+}
+
 config.watson = {}
 config.aws = {}
 config.discord = {}
@@ -17,3 +22,4 @@ config.discord.channelId = '497380218701611011'
 
 
 module.exports = config;
+module.exports.setActiveBot = (bot) => setActiveBot(bot);
