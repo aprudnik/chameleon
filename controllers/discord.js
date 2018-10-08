@@ -1,8 +1,7 @@
 var watson = require('../controllers/watson')
-
 const Discord = require("discord.js");
-
 var auth = require('./auth.json');
+var config = require('../config')
 
 const client = new Discord.Client();
 
@@ -14,11 +13,16 @@ client.on("ready", () => {
     
 client.on("message", (message) => {
     if (message.content.startsWith("!")) {
-        watson(message.content.substr(1),function done(err,callback)
+
+        switch(config.active) {
+            case 'watson':
+                watson(message.content.substr(1),function done(err,callback)
                 {
                     message.channel.send(callback);
-                })
-
+                });
+            case 'aws' :
+                message.channel.send('AWS connector in developement');
+        }
     
     }
 });
@@ -27,5 +31,5 @@ client.on("message", (message) => {
 
 
 module.exports = (text) => {
-    client.channels.get('497380218701611011').send(text);
+    client.channels.get(config.discord.channelId).send(text);
  };

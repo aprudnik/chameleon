@@ -2,15 +2,16 @@
 // receives response.
 
 var AssistantV1 = require('watson-developer-cloud/assistant/v1');
+var config = require('../config')
 
 // Set up Assistant service wrapper.
 var service = new AssistantV1({
-  username: '095c9c0f-24fb-4269-bb43-7038377b6a98', // replace with service username
-  password: 'ooYfoLy4eMAJ', // replace with service password
-  version: '2018-07-10'
+  username: config.watson.username, // replace with service username
+  password: config.watson.password, // replace with service password
+  version: config.watson.version
 });
 
-var workspace_id = 'ff9fa0f0-beb9-4008-b009-f1cc6af5fe51'; // replace with workspace ID
+var workspace_id = config.watson.workspace_id; // replace with workspace ID
 
 // Start conversation with empty message.
 // service.message({
