@@ -22,6 +22,8 @@ app.post('/changeBot', (req,res) => {
     res.send('Changing Active Bot to ' + config.active)
 })
 
+config.setActiveBot('watson');
+
 discordBot
 
 app.listen(port, () => console.log(`Webhook server is listening, port ${port}`));
