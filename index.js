@@ -22,7 +22,7 @@ app.post('/changeBot', (req,res) => {
     res.send('Changing Active Bot to ' + config.active)
 })
 
-config.setActiveBot('watson');
+// config.setActiveBot('watson');
 
 discordBot
 
