@@ -21,9 +21,11 @@ client.on("message", (message) => {
                 {
                     message.channel.send(callback.output.generic[0].text);
                 });
+                break;
             case 'aws' :
-                console.log('How did I got here? ' + config.active)
+                console.log('How did I got here? ' + config.active);
                 message.channel.send('AWS connector in developement');
+                break;
         }
     
     }

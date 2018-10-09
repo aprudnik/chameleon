@@ -1,7 +1,7 @@
 var config = {}
 
 // active examples :  aws, watson
-config.active = 'aws'
+config.active = 'watson'
 
 function setActiveBot(bot) {
     console.log('Changing Active Bot to ' + bot)
