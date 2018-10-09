@@ -17,9 +17,10 @@ app.get('/', (req, res) => res.send('Hello World!'))
 app.get('/verify', verificationControllerFacebook);
 app.post('/slack', verificationControllerSlack);
 app.post('/verify', messageWebhookController);
-app.get('/changeBot:bot', (req,res) => {
-    console.log(req.params('bot'))
-    config.setActiveBot(req.body.bot);
+app.get('/changeBot/:bot', (req,res) => {
+    const params = req.params
+    console.log(params)
+    config.setActiveBot(params.bot);
     res.send('Changing Active Bot to ' + config.active)
 })
 
