@@ -19,9 +19,8 @@ app.post('/slack', verificationControllerSlack);
 app.post('/verify', messageWebhookController);
 app.get('/changeBot/:bot', (req,res) => {
     const params = req.params
-    console.log(params)
     config.setActiveBot(params.bot);
-    res.send('Changing Active Bot to ' + config.active)
+    res.send('Changed Active Bot to ' + config.active)
 })
 
 discordBot
