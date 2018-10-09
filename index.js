@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 var config = require('./config')
+const send = require('./dialog')
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => res.send('Hello World!'))
+app.get('/text', (req, res) => res.send(send(req.query, function (body){console.log(body)})) )
 app.get('/verify', verificationControllerFacebook);
 app.post('/slack', verificationControllerSlack);
 app.post('/verify', messageWebhookController);
@@ -24,6 +26,6 @@ app.post('/changeBot', (req,res) => {
 
 // config.setActiveBot('watson');
 
-discordBot
+//discordBot
 
 app.listen(port, () => console.log(`Webhook server is listening, port ${port}`));

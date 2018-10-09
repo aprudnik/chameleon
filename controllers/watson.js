@@ -36,7 +36,5 @@ module.exports = function(newMessageFromUser,done) {
      service.message({
         workspace_id: workspace_id,
         input: { text: newMessageFromUser }
-        }, function(err,response){
-            done(err,processResponse(err,response))
-        })
+        }, done)
  };

@@ -14,11 +14,12 @@ client.on("ready", () => {
 client.on("message", (message) => {
     if (message.content.startsWith("!")) {
         console.log('I am sending to ' + config.active)
+        await config.active
         switch(config.active) {
             case 'watson':
                 watson(message.content.substr(1),function done(err,callback)
                 {
-                    message.channel.send(callback);
+                    message.channel.send(callback.output.generic[0].text);
                 });
             case 'aws' :
                 console.log('How did I got here? ' + config.active)
