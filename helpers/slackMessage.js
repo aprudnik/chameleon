@@ -21,7 +21,7 @@ module.exports = (message) => {
     const user = message.event.user;
     watson(text,function done(err,callback)
                     {
-                        sendTextMessage(channel, user, callback);
+                        sendTextMessage(channel, user, callback.output.generic[0].text);
                     })
     
  };
