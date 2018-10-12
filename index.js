@@ -10,14 +10,14 @@ const verificationControllerFacebook = require('./controllers/verification');
 const verificationControllerSlack = require('./controllers/slackVerification');
 const messageWebhookController = require('./controllers/messageWebhook');
 const discordBot = require('./controllers/discord')
-const getLuisIntent = require('./controllers/luis')
+const getIntents = require('./controllers/pathSelection')
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => res.send('Hello Chahemeleon'))
 app.get('/text', (req, res) => 
-    getLuisIntent(req.query, function (body){
+    getIntents(req.query, function (err, body){
         res.send(body);
     })) 
 app.get('/verify', verificationControllerFacebook);

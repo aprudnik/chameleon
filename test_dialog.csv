@@ -1,0 +1,5 @@
+Id,Connection_Id,Intent,Entity,Response
+1,0,Welcome,,"Hello, What is your name?;Hello, what should I call you?"
+2,1,,Name,"How can I help you, <Name>?;<Name> what can I help you with?"
+3,2,,,I don't know anything about <job>
+99,0,None,,"Sorry, I can only help you with <something>"

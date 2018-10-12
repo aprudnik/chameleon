@@ -48,7 +48,10 @@ const done = (err, body) =>{
     }
     //Combined entities
     if (intentList.length > 1){
-        var res = Math.max.apply(Math,intentList.map(function(o){return o.score;}))
+        console.log(intentList)
+        var res = Math.max.apply(Math,intentList.map(function(o){
+            if (o.intent == "None"){o.score = 0}
+            return o.score;}))
         var obj = intentList.find(function(o){ return o.score == res; })
         responseList["entities"] = entitiesList;
         responseList["intent"] = obj.intent;
