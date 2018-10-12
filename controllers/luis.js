@@ -1,8 +1,7 @@
 const request = require('request');
 var config = require('../config')
 
-const GetIntent = (query, callback)  => {
-    text=query.message;
+const GetIntent = (text, callback)  => {
     url_to_send = config.luis.url + text
 
     request({
@@ -11,7 +10,7 @@ const GetIntent = (query, callback)  => {
         },
         function (error, response, body) {
             
-            callback(body);
+            callback(error, body);
             return body
           }
           )
