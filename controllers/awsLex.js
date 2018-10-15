@@ -28,7 +28,7 @@ function pushChat(text, response) {
             console.log(err)
         }
         console.log(data)
-        response(data.intentName)
+        response(null,data.intentName)
     })
 
 }
