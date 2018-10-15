@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/aprudnik/chameleon#readme",
   "dependencies": {
+    "aws-sdk": "^2.334.0",
     "body-parser": "^1.18.3",
     "discord.io": "^2.5.3",
     "discord.js": "^11.4.2",
