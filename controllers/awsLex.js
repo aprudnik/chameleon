@@ -11,7 +11,6 @@ var lexUserId = 'chatbot-demo' + Date.now();
 var sessionAttributes = {};
 
 function pushChat(text, response) {
-    console.log(text)
 
     var params = {
         botAlias: config.aws.botAlias,
@@ -21,13 +20,10 @@ function pushChat(text, response) {
         sessionAttributes: sessionAttributes
     };
 
-    console.log(params)
-
     lexruntime.postText(params,function(err,data){
         if (err) {
             console.log(err)
         }
-        console.log(data)
         response(null,data)
     })
 

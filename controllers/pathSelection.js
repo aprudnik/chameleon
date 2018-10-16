@@ -54,7 +54,6 @@ const done = (err, body) =>{
     if (body.intentName){
         response = {}
         response["intent"] = body.intentName
-        console.log(body.slots)
         if(body.slots){
             Object.keys(body.slots).forEach( entityName => {
                 entities = {}
@@ -67,15 +66,15 @@ const done = (err, body) =>{
     }
 
     //Combined entities
-    if (intentList.length > 1){
-        var res = Math.max.apply(Math,intentList.map(function(o){
-            if (o.intent == "None"){o.score = 0}
-            return o.score;}))
-        var obj = intentList.find(function(o){ return o.score == res; })
-        responseList["entities"] = entitiesList;
-        responseList["intent"] = obj.intent;
-        responseList["score"] = obj.score;
-    }
+    // if (intentList.length > 1){
+    //     var res = Math.max.apply(Math,intentList.map(function(o){
+    //         if (o.intent == "None"){o.score = 0}
+    //         return o.score;}))
+    //     var obj = intentList.find(function(o){ return o.score == res; })
+    //     responseList["entities"] = entitiesList;
+    //     responseList["intent"] = obj.intent;
+    //     responseList["score"] = obj.score;
+    // }
     //Choosing the top intent
 
 }
