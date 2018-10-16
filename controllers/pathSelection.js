@@ -1,5 +1,8 @@
+const config = require('../config')
+
 const getLuisIntent = require('../controllers/luis')
 const getWatsonIntent = require('../controllers/watson')
+const getAwsIntent = require('../controllers/awsLex')
 
 var responseList = {}
 var entities = {}
@@ -46,6 +49,22 @@ const done = (err, body) =>{
             entitiesList.push(entities);
         });
     }
+
+    //AWS json parse
+    if (body.intentName){
+        response = {}
+        response["intent"] = body.intentName
+        if(body.slots){
+            body.slots.forEach( entity => {
+                entities = {}
+                entities["type"] = entity.keys()[0];
+                entities["value"] = entity[entities["type"]];
+                entitiesList.push(entities);
+            })
+        }
+
+    }
+
     //Combined entities
     if (intentList.length > 1){
         console.log(intentList)
@@ -62,11 +81,13 @@ const done = (err, body) =>{
 }
 
 
-module.exports = (text, response) => {
+module.exports = (bot, text, response) => {
     message = text.message;
-    getLuisIntent(message, done);
-    getWatsonIntent(message, done);
-    if (Object.keys(responseList).length > 1) {
+    if (bot.indexOf('aws') >= 0){ getAwsIntent(message,done) }
+    if (bot.indexOf('luis') >= 0){ getLuisIntent(message,done) }
+    if (bot.indexOf('watson') >= 0){ getWatsonIntent(message,done) }
+
+    if (Object.keys(responseList).length == config.active.length ) {
         response(null, responseList);
         intentList = []
         entitiesList = []

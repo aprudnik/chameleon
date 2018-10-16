@@ -11,7 +11,6 @@ const verificationControllerSlack = require('./controllers/slackVerification');
 const messageWebhookController = require('./controllers/messageWebhook');
 const discordBot = require('./controllers/discord')
 const getIntents = require('./controllers/pathSelection')
-// const parseIntents = require('./controllers/parseCSV')
 const awsLex = require('./controllers/awsLex')
 
 app.use(bodyParser.json());
@@ -19,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => res.send('Hello, I am Chahemeleon!'))
 app.get('/text', (req, res) => 
-    getIntents(req.query, function (err, body){
+    getIntents(config.active, req.query, function (err, body){
         res.send(body);
     })) 
 app.get('/verify', verificationControllerFacebook);

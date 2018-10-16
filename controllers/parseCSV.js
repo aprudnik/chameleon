@@ -2,8 +2,10 @@ var csv = require('csv');
 var fs = require('fs');
 
 var parser = csv.parse();
+var parsedObject = {};
 
 csvPath = "../test_dialog.csv"
+intentsPath = '../intents.csv'
 
 
 
