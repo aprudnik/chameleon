@@ -56,10 +56,10 @@ const done = (err, body) =>{
         response["intent"] = body.intentName
         console.log(body.slots)
         if(body.slots){
-            body.slots.forEach( entity => {
+            Object.keys(body.slots).forEach( entityName => {
                 entities = {}
-                entities["type"] = entity.keys()[0];
-                entities["value"] = entity[entities["type"]];
+                entities["type"] = entityName;
+                entities["value"] = body.slots[entityName];
                 entitiesList.push(entities);
             })
         }
@@ -68,7 +68,6 @@ const done = (err, body) =>{
 
     //Combined entities
     if (intentList.length > 1){
-        console.log(intentList)
         var res = Math.max.apply(Math,intentList.map(function(o){
             if (o.intent == "None"){o.score = 0}
             return o.score;}))
@@ -84,7 +83,6 @@ const done = (err, body) =>{
 
 module.exports = (bot, text, response) => {
     message = text.message;
-    console.log(message)
     if (bot.indexOf('aws') >= 0){ getAwsIntent(message,done) }
     if (bot.indexOf('luis') >= 0){ getLuisIntent(message,done) }
     if (bot.indexOf('watson') >= 0){ getWatsonIntent(message,done) }
