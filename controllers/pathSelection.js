@@ -54,6 +54,7 @@ const done = (err, body) =>{
     if (body.intentName){
         response = {}
         response["intent"] = body.intentName
+        console.log(body.slots)
         if(body.slots){
             body.slots.forEach( entity => {
                 entities = {}
@@ -83,9 +84,10 @@ const done = (err, body) =>{
 
 module.exports = (bot, text, response) => {
     message = text.message;
-    if (bot.indexOf('aws') >= 0){ getAwsIntent(message,done) }
+    console.log(message)
+    // if (bot.indexOf('aws') >= 0){ getAwsIntent(message,done) }
     if (bot.indexOf('luis') >= 0){ getLuisIntent(message,done) }
-    if (bot.indexOf('watson') >= 0){ getWatsonIntent(message,done) }
+    //if (bot.indexOf('watson') >= 0){ getWatsonIntent(message,done) }
 
     if (Object.keys(responseList).length == config.active.length ) {
         response(null, responseList);

@@ -9,7 +9,6 @@ const GetIntent = (text, callback)  => {
         method: 'GET'
         },
         function (error, response, body) {
-            
             callback(error, body);
             return body
           }
