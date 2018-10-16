@@ -85,9 +85,9 @@ const done = (err, body) =>{
 module.exports = (bot, text, response) => {
     message = text.message;
     console.log(message)
-    // if (bot.indexOf('aws') >= 0){ getAwsIntent(message,done) }
+    if (bot.indexOf('aws') >= 0){ getAwsIntent(message,done) }
     if (bot.indexOf('luis') >= 0){ getLuisIntent(message,done) }
-    //if (bot.indexOf('watson') >= 0){ getWatsonIntent(message,done) }
+    if (bot.indexOf('watson') >= 0){ getWatsonIntent(message,done) }
 
     if (Object.keys(responseList).length == config.active.length ) {
         response(null, responseList);
