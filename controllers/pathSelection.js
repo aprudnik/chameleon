@@ -19,10 +19,7 @@ const done = (err, body) =>{
     if (body.intents){
         doneWork.push("Watson")
         if (Object.keys(body.intents).length>0){
-            response = {}
-            response["intent"] = body.intents[0].intent;
-            response["score"] = body.intents[0].confidence;
-            intentList.push(response);
+            intentList.push(body.intents[0].intent);
         } else {
             intentList.push({"intent": "None","score": 0});
             }
@@ -38,10 +35,7 @@ const done = (err, body) =>{
 
     //LUIS json parse
     if (body.topScoringIntent){
-        response = {}
-        response["intent"] = body.topScoringIntent.intent;
-        response["score"] = body.topScoringIntent.score;
-        intentList.push(response);
+        intentList.push(body.topScoringIntent.intent);
         body.entities.forEach(entity => {
             entities = {}
             entities["type"] = entity.type;
@@ -52,8 +46,7 @@ const done = (err, body) =>{
 
     //AWS json parse
     if (body.intentName){
-        response = {}
-        response["intent"] = body.intentName
+        intentList.push(body.intentName)
         if(body.slots){
             Object.keys(body.slots).forEach( entityName => {
                 entities = {}
@@ -66,15 +59,15 @@ const done = (err, body) =>{
     }
 
     //Combined entities
-    // if (intentList.length > 1){
-    //     var res = Math.max.apply(Math,intentList.map(function(o){
-    //         if (o.intent == "None"){o.score = 0}
-    //         return o.score;}))
-    //     var obj = intentList.find(function(o){ return o.score == res; })
-    //     responseList["entities"] = entitiesList;
-    //     responseList["intent"] = obj.intent;
-    //     responseList["score"] = obj.score;
-    // }
+    if (intentList.length == config.active.length){
+        var res = Math.max.apply(Math,intentList.map(function(o){
+            if (o.intent == "None"){o.score = 0}
+            return o.score;}))
+        var obj = intentList.find(function(o){ return o.score == res; })
+        responseList["entities"] = entitiesList;
+        responseList["intent"] = obj.intent;
+        responseList["score"] = obj.score;
+    }
     //Choosing the top intent
 
 }
