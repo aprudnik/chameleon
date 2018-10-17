@@ -60,13 +60,21 @@ const done = (err, body) =>{
 
     //Combined entities
     if (intentList.length == config.active.length){
-        var res = Math.max.apply(Math,intentList.map(function(o){
-            if (o.intent == "None"){o.score = 0}
-            return o.score;}))
-        var obj = intentList.find(function(o){ return o.score == res; })
+        var reducedList = intentList.reduce(function (map, word){
+            map[word] = ( map[word] || 0) + 1;
+            return map;
+        }, Object.create(null))
+        var maxValue = Math.max.apply(null, Object.values(reducedList))
+        var maxIntent = Object.keys(reducedList).find(function(a) {
+                return reducedList[a] === maxValue
+            });
+        console.log(maxIntent)
+        // var res = Math.max.apply(Math,intentList.map(function(o){
+        //     if (o.intent == "None"){o.score = 0}
+        //     return o.score;}))
+        // var obj = intentList.find(function(o){ return o.score == res; })
         responseList["entities"] = entitiesList;
-        responseList["intent"] = obj.intent;
-        responseList["score"] = obj.score;
+        responseList["intent"] = maxIntent;
     }
     //Choosing the top intent
 
