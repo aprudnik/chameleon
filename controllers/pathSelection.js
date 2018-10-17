@@ -23,7 +23,7 @@ const done = (err, body) =>{
         if (Object.keys(body.intents).length>0){
             intentList.push(body.intents[0].intent);
         } else {
-            intentList.push({"intent": "None","score": 0});
+            intentList.push("None");
             }
         if (body.entities){
             body.entities.forEach(entity => {
