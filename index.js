@@ -12,6 +12,7 @@ const messageWebhookController = require('./controllers/messageWebhook');
 const discordBot = require('./controllers/discord')
 const getIntents = require('./controllers/pathSelection')
 const awsLex = require('./controllers/awsLex')
+const dialog = require('./controllers/dialog')
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,7 +20,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/', (req, res) => res.send('Hello, I am Chahemeleon!'))
 app.get('/text', (req, res) => 
     getIntents(config.active, req.query, function (err, body){
-        res.send(body);
+        dialog(body.intent,res.send)
+        // res.send(body);
     })) 
 app.get('/verify', verificationControllerFacebook);
 app.post('/slack', verificationControllerSlack);
