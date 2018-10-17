@@ -10,6 +10,8 @@ doneWork = []
 entitiesList = []
 intentList = []
 
+var responseCount = false
+
 const done = (err, body) =>{
     
     if (typeof body === "string") {
@@ -75,6 +77,7 @@ const done = (err, body) =>{
         // var obj = intentList.find(function(o){ return o.score == res; })
         responseList["entities"] = entitiesList;
         responseList["intent"] = maxIntent;
+        responseCount = true
     }
     //Choosing the top intent
 
@@ -87,9 +90,10 @@ module.exports = (bot, text, response) => {
     if (bot.indexOf('luis') >= 0){ getLuisIntent(message,done) }
     if (bot.indexOf('watson') >= 0){ getWatsonIntent(message,done) }
 
-    if (Object.keys(responseList).length == config.active.length ) {
+    if (responseCount) {
         response(null, responseList);
         intentList = []
         entitiesList = []
+        responseCount = false
     }
 }
