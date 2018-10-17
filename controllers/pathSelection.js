@@ -70,7 +70,8 @@ const done = (err, body) =>{
         var maxIntent = Object.keys(reducedList).find(function(a) {
                 return reducedList[a] === maxValue
             });
-        console.log(maxIntent)
+        console.log(intentList)
+        console.log(reducedList)
         // var res = Math.max.apply(Math,intentList.map(function(o){
         //     if (o.intent == "None"){o.score = 0}
         //     return o.score;}))
