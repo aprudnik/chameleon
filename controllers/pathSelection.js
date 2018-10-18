@@ -3,6 +3,7 @@ const config = require('../config')
 const getLuisIntent = require('../controllers/luis')
 const getWatsonIntent = require('../controllers/watson')
 const getAwsIntent = require('../controllers/awsLex')
+var Promise = require('promise');
 
 var responseList = {}
 var entities = {}
@@ -61,6 +62,7 @@ const done = (err, body) =>{
     }
 
     //Combined entities
+    console.log(intentList)
     if (intentList.length == config.active.length){
         var reducedList = intentList.reduce(function (map, word){
             map[word] = ( map[word] || 0) + 1;
@@ -70,8 +72,8 @@ const done = (err, body) =>{
         var maxIntent = Object.keys(reducedList).find(function(a) {
                 return reducedList[a] === maxValue
             });
-        console.log(intentList)
-        console.log(reducedList)
+        // console.log(intentList)
+        // console.log(reducedList)
         // var res = Math.max.apply(Math,intentList.map(function(o){
         //     if (o.intent == "None"){o.score = 0}
         //     return o.score;}))
@@ -79,6 +81,7 @@ const done = (err, body) =>{
         responseList["entities"] = entitiesList;
         responseList["intent"] = maxIntent;
         responseCount = true
+        // console.log(responseCount)
     }
     //Choosing the top intent
 
@@ -87,14 +90,40 @@ const done = (err, body) =>{
 
 module.exports = (bot, text, response) => {
     message = text.message;
-    if (bot.indexOf('aws') >= 0){ getAwsIntent(message,done) }
-    if (bot.indexOf('luis') >= 0){ getLuisIntent(message,done) }
-    if (bot.indexOf('watson') >= 0){ getWatsonIntent(message,done) }
+    // if (bot.indexOf('aws') >= 0){ getAwsIntent(message,done) }
+    // if (bot.indexOf('luis') >= 0){ getLuisIntent(message,done) }
+    // if (bot.indexOf('watson') >= 0){ getWatsonIntent(message,done) }
 
-    if (responseCount) {
-        response(null, responseList);
-        intentList = []
-        entitiesList = []
-        responseCount = false
+    // async function waitAll(){
+    //     await getLuisIntent(message)
+    //     await console.log("I was waiting like a boss")
+    //     await console.log(responseList)
+    //     await response(responseList)
+    // }
+    function promiseWrap(notWrapedFunction) {
+        return new Promise(resolve => {
+            notWrapedFunction(message,(err,body) => {
+                resolve(done(null,body))
+            })
+        })
     }
+
+    // waitAll()
+    promiseWrap(getAwsIntent)
+        // .then(promiseWrap(getWatsonIntent))
+        // .then(promiseWrap(getAwsIntent))
+        .then(() => {
+            console.log('should be after response list')
+            console.log(responseList)
+            response(null,responseList)
+        })
+
+    // console.log(Object.keys(responseList).length)
+    // if (Object.keys(responseList).length > 1) {
+    //     console.log('I am here OMG')
+    //     response(null, responseList);
+    //     intentList = []
+    //     entitiesList = []
+    //     responseCount = false
+    // }
 }
