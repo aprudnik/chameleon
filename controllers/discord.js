@@ -2,8 +2,8 @@ var watson = require('../controllers/watson')
 const Discord = require("discord.js");
 var auth = require('./auth.json');
 var config = require('../config')
-const getIntents = require('./controllers/pathSelection')
-const dialog = require('./controllers/dialog')
+const getIntents = require('./pathSelection')
+const dialog = require('./dialog')
 
 const client = new Discord.Client();
 
