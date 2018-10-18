@@ -20,10 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/', (req, res) => res.send('Hello, I am Chahemeleon!'))
 app.get('/text', (req, res) => 
     getIntents(config.active, req.query, function (err, body){
-        // dialog(body.intent,res)
-        console.log("Iam at top")
-        console.log(body)
-        res.send(body);
+        dialog(body.intent,resMessage => {res.send(resMessage)})
     })) 
 app.get('/verify', verificationControllerFacebook);
 app.post('/slack', verificationControllerSlack);

@@ -17,6 +17,5 @@ const GetIntent = (text, callback)  => {
 };
 
 module.exports = (text, response) => {
-    console.log("i am at luis")
     GetIntent(text, response)
 }

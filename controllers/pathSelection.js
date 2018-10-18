@@ -9,9 +9,7 @@ var responseList = {}
 var entities = {}
 doneWork = []
 entitiesList = []
-intentList = []
-
-var responseCount = false
+var intentList = []
 
 const done = (err, body) =>{
     
@@ -80,7 +78,6 @@ const done = (err, body) =>{
         // var obj = intentList.find(function(o){ return o.score == res; })
         responseList["entities"] = entitiesList;
         responseList["intent"] = maxIntent;
-        responseCount = true
         // console.log(responseCount)
     }
     //Choosing the top intent
@@ -109,19 +106,12 @@ module.exports = (bot, text, response) => {
     }
 
     // waitAll()
-    promiseWrap(getAwsIntent)
+    promiseWrap(getLuisIntent)
         .then(promiseWrap(getWatsonIntent))
-        .then(promiseWrap(getLuisIntent))
+        // .then(promiseWrap(getAwsIntent))
         .then(() => {
+            intentList = []
+            entitiesList = []
             response(null,responseList)
         })
-
-    // console.log(Object.keys(responseList).length)
-    // if (Object.keys(responseList).length > 1) {
-    //     console.log('I am here OMG')
-    //     response(null, responseList);
-    //     intentList = []
-    //     entitiesList = []
-    //     responseCount = false
-    // }
 }
