@@ -110,11 +110,9 @@ module.exports = (bot, text, response) => {
 
     // waitAll()
     promiseWrap(getAwsIntent)
-        // .then(promiseWrap(getWatsonIntent))
-        // .then(promiseWrap(getAwsIntent))
+        .then(promiseWrap(getWatsonIntent))
+        .then(promiseWrap(getLuisIntent))
         .then(() => {
-            console.log('should be after response list')
-            console.log(responseList)
             response(null,responseList)
         })
 
