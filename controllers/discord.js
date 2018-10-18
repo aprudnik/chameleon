@@ -16,6 +16,7 @@ client.on("ready", () => {
 client.on("message", (message) => {
     if (message.content.startsWith("!")) {
         getIntents(config.active, message.content, function (err, body){
+            console.log("Discord log : ",body.intent)
             dialog(body.intent,resMessage => {message.channel.send(resMessage)})
         })
     } 
