@@ -19,7 +19,7 @@ function pushChat(text, response) {
         userId: lexUserId,
         sessionAttributes: sessionAttributes
     };
-
+    console.log(params)
     lexruntime.postText(params,function(err,data){
         if (err) {
             console.log(err)

@@ -86,7 +86,6 @@ const done = (err, body) =>{
 
 
 module.exports = (bot, text, response) => {
-    message = text.message;
     // if (bot.indexOf('aws') >= 0){ getAwsIntent(message,done) }
     // if (bot.indexOf('luis') >= 0){ getLuisIntent(message,done) }
     // if (bot.indexOf('watson') >= 0){ getWatsonIntent(message,done) }
@@ -99,7 +98,7 @@ module.exports = (bot, text, response) => {
     // }
     function promiseWrap(notWrapedFunction) {
         return new Promise(resolve => {
-            notWrapedFunction(message,(err,body) => {
+            notWrapedFunction(text,(err,body) => {
                 resolve(done(null,body))
             })
         })
@@ -107,11 +106,11 @@ module.exports = (bot, text, response) => {
 
     // waitAll()
     promiseWrap(getLuisIntent)
-        .then(promiseWrap(getWatsonIntent))
-        .then(promiseWrap(getAwsIntent))
+        .then(promiseWrap(getWatsonIntent)
+        .then(promiseWrap(getAwsIntent)
         .then(() => {
             intentList = []
             entitiesList = []
             response(null,responseList)
-        })
+        })))
 }
