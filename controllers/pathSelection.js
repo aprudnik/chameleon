@@ -108,7 +108,7 @@ module.exports = (bot, text, response) => {
     // waitAll()
     promiseWrap(getLuisIntent)
         .then(promiseWrap(getWatsonIntent))
-        // .then(promiseWrap(getAwsIntent))
+        .then(promiseWrap(getAwsIntent))
         .then(() => {
             intentList = []
             entitiesList = []
