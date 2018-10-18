@@ -15,7 +15,7 @@ client.on("ready", () => {
     
 client.on("message", (message) => {
     if (message.content.startsWith("!")) {
-        getIntents(config.active, req.query, function (err, body){
+        getIntents(config.active, message.content, function (err, body){
             dialog(body.intent,resMessage => {message.channel.send(resMessage)})
         })
     } 
