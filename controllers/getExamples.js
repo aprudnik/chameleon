@@ -12,10 +12,10 @@ const makeList= (paramExampleDict, text) => {
         paramNameList.forEach((param, numParam) => {
             paramExampleDict[param].forEach((value, index) => {
                 text.forEach(example =>{
-                    paramStart = example.indexOf(`<`+param+`>`)-numParam*3
+                    paramStart = example.indexOf(`{`+param+`}`)-numParam*3
                     if (paramStart > -1){
                         paramEnd = paramStart + value.length-1
-                        ModExamples.push(index+ `||` + example.replace(`<`+param+`>`,value) + `$${param}-${paramStart}-${paramEnd}`)
+                        ModExamples.push(index+ `||` + example.replace(`{`+param+`}`,value) + `$${param}-${paramStart}-${paramEnd}`)
                     }
                 })  
             })
@@ -39,7 +39,7 @@ const makeList= (paramExampleDict, text) => {
 const getTextEntities = (text, replacementList) => {
     output = []
     replacementList.forEach(replacement =>{
-        if (text.indexOf(`<`+replacement+`>`) > -1){
+        if (text.indexOf(`{`+replacement+`}`) > -1){
             output.push(replacement)
         }
     })
@@ -52,4 +52,8 @@ module.exports.makeList = (entities, text) => {
 }
 module.exports.getJson = () => {
     return initial
+}
+
+module.exports.getTextEntities = (text, replacementList) => {
+    return getTextEntities(text, replacementList)
 }
