@@ -9,7 +9,6 @@ const GetIntent = (text, callback)  => {
         method: 'GET'
         },
         function (error, response, body) {
-            
             callback(error, body);
             return body
           }
@@ -19,5 +18,4 @@ const GetIntent = (text, callback)  => {
 
 module.exports = (text, response) => {
     GetIntent(text, response)
-    
 }
