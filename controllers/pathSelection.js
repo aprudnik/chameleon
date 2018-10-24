@@ -10,8 +10,9 @@ var entities = {}
 doneWork = []
 entitiesList = []
 var intentList = []
+var entities = {}
 
-const done = (err, body) =>{
+const done = (err, body, result) =>{
     
     if (typeof body === "string") {
         body = JSON.parse(body)
@@ -26,9 +27,9 @@ const done = (err, body) =>{
             }
         if (body.entities){
             body.entities.forEach(entity => {
-                entities = {}
-                entities["type"] = entity.entity;
-                entities["value"] = entity.value;
+                // entities = {}
+                // entities["type"] = entity.entity;
+                entities[entity.entity] = entity.value;
                 entitiesList.push(entities);
             });
         }
@@ -38,9 +39,9 @@ const done = (err, body) =>{
     if (body.topScoringIntent){
         intentList.push(body.topScoringIntent.intent);
         body.entities.forEach(entity => {
-            entities = {}
-            entities["type"] = entity.type;
-            entities["value"] = entity.entity;
+            // entities = {}
+            // entities["type"] = entity.type;
+            entities[entity.type] = entity.entity;
             entitiesList.push(entities);
         });
     }
@@ -50,9 +51,9 @@ const done = (err, body) =>{
         intentList.push(body.intentName)
         if(body.slots){
             Object.keys(body.slots).forEach( entityName => {
-                entities = {}
-                entities["type"] = entityName;
-                entities["value"] = body.slots[entityName];
+                // entities = {}
+                // entities["type"] = entityName;
+                entities[entityName] = body.slots[entityName];
                 entitiesList.push(entities);
             })
         }
@@ -61,7 +62,7 @@ const done = (err, body) =>{
 
     //Combined entities
     console.log(intentList)
-    if (intentList.length == config.active.length){
+    // if (intentList.length == config.active.length){
         var reducedList = intentList.reduce(function (map, word){
             map[word] = ( map[word] || 0) + 1;
             return map;
@@ -76,10 +77,12 @@ const done = (err, body) =>{
         //     if (o.intent == "None"){o.score = 0}
         //     return o.score;}))
         // var obj = intentList.find(function(o){ return o.score == res; })
-        responseList["entities"] = entitiesList;
+        responseList["entities"] = entities;
         responseList["intent"] = maxIntent;
-        // console.log(responseCount)
-    }
+        
+        result(responseList)
+    // }
+    
     //Choosing the top intent
 
 }
@@ -96,21 +99,35 @@ module.exports = (bot, text, response) => {
     //     await console.log(responseList)
     //     await response(responseList)
     // }
-    function promiseWrap(notWrapedFunction) {
+ async function promiseWrap(notWrapedFunction) {
         return new Promise(resolve => {
             notWrapedFunction(text,(err,body) => {
-                resolve(done(null,body))
+                done(null,body,(result) => {
+                    console.log("Promise wrap")
+                    resolve(result)
+                })
             })
         })
     }
 
     // waitAll()
-    promiseWrap(getLuisIntent)
-        .then(promiseWrap(getWatsonIntent)
-        .then(promiseWrap(getAwsIntent)
-        .then(() => {
-            intentList = []
-            entitiesList = []
-            response(null,responseList)
-        })))
+async function run() {
+    await promiseWrap(getLuisIntent)
+    await promiseWrap(getWatsonIntent)
+    await promiseWrap(getAwsIntent)
+    intentList = []
+    entities = {}
+    response(null,responseList)
+}
+run ()
+        // .then(promiseWrap(getWatsonIntent)
+        //     .then(promiseWrap(getAwsIntent)
+        //     .then(() => {
+        //         console.log("AAAAAA",intentList)
+        //         intentList = []
+        //         entities = {}
+        //         response(null,responseList)
+        //         // getWatsonIntent = null
+        //     }))
+        // )
 }
