@@ -1,0 +1,8 @@
+{"Intents" : [
+    {"Name":"Buying", "Examples": ["Can I buy {Program} for {OS}?", "How much does {Program} cost?"]},
+    {"Name":"Weather", "Examples": ["What is the weather like today?", "How is the weather?"]}
+], 
+"Entities": {
+    "Program": ["Word", "Excel", "PowerPoint"], 
+    "OS": ["Windows", "Linux", "MacOS"]
+}}
