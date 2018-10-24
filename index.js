@@ -17,11 +17,11 @@ const dialog = require('./controllers/dialog')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => res.send('Hello, I am Chahemeleon!'))
+app.get('/', (req, res) => res.send('Hello, I am Chameleon!'))
 app.get('/text', (req, res) => 
     getIntents(config.active, req.query, function (err, body){
-        dialog(body.intent,resMessage => {res.send(resMessage)})
-    })) 
+         res.send(body)}
+    )) 
 app.get('/verify', verificationControllerFacebook);
 app.post('/slack', verificationControllerSlack);
 app.post('/verify', messageWebhookController);
