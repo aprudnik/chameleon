@@ -1,4 +1,4 @@
-const csvFilePath='../knowledgeDB/light.csv'
+const csvFilePath='./knowledgeDB/light.csv'
 const csv=require('csvtojson')
 
 responses = {}
@@ -7,6 +7,15 @@ responses['Light'] = "I have a lot of bulbs"
 responses['None'] = "Sorry I don't understand, can you rephrase?"
 
 var jsonArray
+
+async function getDataFromDB(db,params,result){
+    db.forEach((object) => {
+        if (params.Socket == object.Socket){
+
+        }
+    })
+}
+
 async function loadData() {
     jsonArray = await csv().fromFile(csvFilePath)
     console.log(jsonArray)
@@ -14,13 +23,6 @@ async function loadData() {
 
 loadData()
 
-
-
-function getDataFromDB(params,result){
-    if (params.Socket){
-
-    }
-}
 
 function dialogFlow(body,answer) {
     if (body.entities) {
