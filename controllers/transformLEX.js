@@ -11,27 +11,54 @@ AWS.config.region = config.aws.region; // Region
         });
 
 var lexmodelbuildingservice = new AWS.LexModelBuildingService();
-var lexUserId = 'chatbot-demo' + Date.now();
-var sessionAttributes = {};
+
+
+function getIntentChecksum(intentName, callback) {
+    var params = {
+        version: "$LATEST", 
+        name: intentName
+       };
+    lexmodelbuildingservice.getIntent(params, function(err, data) {
+        if (err) {
+            console.log(err.message)
+            callback(null)
+        }
+         else callback(data.checksum);})
+}
+
+function getSlotTypeChecksum(slotTypeName, callback) {
+    var params = {
+        version: "$LATEST", 
+        name: slotTypeName
+       };
+    lexmodelbuildingservice.getSlotType(params, function(err, data) {
+         if (err) {
+            console.log(err.message)
+            callback(null)
+        }
+         else callback(data.checksum);})
+}
 
 function addIntent(name, ModExamples, slots, response) {
-    var params = {
-        "name": name, 
-        "description": "", 
-        "fulfillmentActivity": {
-         "type": "ReturnIntent"
-        }, 
-        "sampleUtterances": ModExamples, 
-        "slots": slots
-       };
-    response(null, params)
-    // lexmodelbuildingservice.putIntent(params, function(err, data){
-    //     if (err) {
-    //         console.log(err)
-    //     }
-    //     response(null,data)
-    // })
-
+    getIntentChecksum(name, function(checksum){
+        var params = {
+            "name": name, 
+            "description": "", 
+            "fulfillmentActivity": {
+            "type": "ReturnIntent"
+            }, 
+            "sampleUtterances": ModExamples, 
+            "slots": slots
+        };
+        if (checksum) {params["checksum"]=checksum}
+        //response(null, params)
+        lexmodelbuildingservice.putIntent(params, function(err, data){
+            if (err) {
+                console.log(err.message)
+            }
+            response(null,data)
+        })
+    })
 }
 
 
@@ -39,40 +66,129 @@ async function runLoop(){
     intents = []
 
     initial["Intents"].forEach(intent => {
-        slots = []
-        
+        slots = {}
+        slots["slots"]=[]
+        slots["entities"]=[]
+        modText0 = []
         intent["Examples"].forEach(example => {
-            modText = getExamples.makeList(initial["Entities"], example)
-            modText0 = []
-            modText.forEach(text =>{
-                modText0.push(text[0])
-            })
             entityList = getExamples.getTextEntities(example,  Object.keys(initial["Entities"]))
             entityList.forEach(entity => {
-                slot = {
-                    "name": entity, 
-                    "description": "", 
-                    "priority": 1, 
-                    "sampleUtterances": intent["Examples"], 
-                    "slotConstraint": "Optional", 
-                    "slotType": entity+`Type`, 
-                    "slotTypeVersion": "$LATEST", 
+                if (slots["entities"].indexOf(entity) == -1){
+                    slot = {
+                        "name": entity, 
+                        "description": "", 
+                        "priority": 1, 
+                        "sampleUtterances": intent["Examples"], 
+                        "slotConstraint": "Optional", 
+                        "slotType": entity+`Type`, 
+                        "slotTypeVersion": "$LATEST", 
+                    }
+                    slots["slots"].push(slot)
+                    slots["entities"].push(entity)
                 }
-                slots.push(slot)
             })
-            intents.push([intent["Name"], modText0, slots])
-        })    
+        })   
+        intents.push([intent["Name"], intent["Examples"], slots["slots"]])
     })
     return intents    
 }
 
+
+async function putSlotType() {
+    createdTypes = []
+    Object.keys(initial["Entities"]).forEach(entity => {
+            getSlotTypeChecksum(entity+`Type`, function(checksum){
+            values = []
+            initial["Entities"][entity].forEach(value =>{
+                values.push({"value": value})
+            })
+            var params = {
+                "name": entity+`Type`, 
+                "description": "", 
+                "enumerationValues": values
+            };
+            if (checksum) {params["checksum"]=checksum}
+            //console.log(params)
+            lexmodelbuildingservice.putSlotType(params, function(err, data){
+                createdTypes.push(entity+`Type`)
+                if (err) {
+                    console.log(err.message)
+                }                
+                if (Object.keys(initial["Entities"]).length == createdTypes.length) {
+                        putIntent()
+                }
+            })
+        })
+    })
+    
+}
+
 async function putIntent(){
     intents = await runLoop()
+    done = []
     intents.forEach(intent => {
         addIntent(intent[0], intent[1], intent[2], function(err, data){
-            console.log(data)
+            done.push(data)
+            if (intents.length == done.length){
+                updateBot()
+            }
+            
         })
     })
 }
 
-putIntent()
+async function updateBot(){
+        getBotData(function(checksum){
+        payload =[]
+        initial["Intents"].forEach(intent => {
+            payload.push({
+                intentName: intent["Name"], 
+                intentVersion: "$LATEST"
+                })
+        })
+        var params = {
+            intents: payload,
+            name: config.aws.botName,
+            locale: "en-US",
+            childDirected: false,
+            checksum: checksum,
+            clarificationPrompt: {
+                maxAttempts: 1,
+                messages: [{
+                    content: "Can you repeate what you just said?", 
+                    contentType: "PlainText",
+                    groupNumber: 1
+                  }]
+            },
+            abortStatement: {
+                messages: [ 
+                  {
+                    content: 'STRING_VALUE',
+                    contentType: "PlainText",
+                    groupNumber: 1
+                  }
+                ]
+
+              }
+        }
+        console.log(params)
+        lexmodelbuildingservice.putBot(params, function(err, data) {
+            if (err) {console.log(err);}
+            else  {   console.log(data);  }
+        })
+    })
+}
+
+async function getBotData(response){
+    var params = {
+        versionOrAlias: "$LATEST" ,
+        name: config.aws.botName
+      };
+      lexmodelbuildingservice.getBot(params, function(err, data) {
+        if (err) {console.log(err.message); }// an error occurred
+        else   {  response(data.checksum)  }        // successful response
+      });
+}
+
+putSlotType()
+
