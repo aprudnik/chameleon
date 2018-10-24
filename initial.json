@@ -1,9 +1,13 @@
 {"Intents" : [
     {"Name":"Buying", "Examples": ["Can I buy {Program} for {OS}?", "How much does {Program} cost?"]},
+<<<<<<< HEAD
     {"Name":"Weather", "Examples": ["What is the weather like today?", "How is the weather?"]},
     {"Name" : "Greeting", "Examples": ["hi", "hello","good morning","welcome"]},
     {"Name" : "Order", "Examples": ["I want to order", "order", "order me"]},
     {"Name" : "Question", "Examples": ["can you", "what is", "show me all", "show me only", "I want to know about", "give me"]}
+=======
+    {"Name":"WeatherCustom", "Examples": ["What is the weather like today?", "How is the weather?"]}
+>>>>>>> fe36a6cb244d194635214b675aa446921a472b8b
 ], 
 "Entities": {
     "Program": ["Word", "Excel", "PowerPoint"], 
