@@ -1,8 +1,9 @@
 var config = {}
 
 // active examples :  aws, watson
-config.active = ['watson','luis', 'aws']
+// config.active = ['watson','luis', 'aws']
 // config.active = ['watson','luis']
+config.active = ['watson']
 
 function setActiveBot(bot) {
     console.log('Changing Active Bot to ' + bot)

@@ -112,9 +112,9 @@ module.exports = (bot, text, response) => {
 
     // waitAll()
 async function run() {
-    await promiseWrap(getLuisIntent)
+    // await promiseWrap(getLuisIntent)
     await promiseWrap(getWatsonIntent)
-    await promiseWrap(getAwsIntent)
+    // await promiseWrap(getAwsIntent)
     intentList = []
     entities = {}
     response(null,responseList)

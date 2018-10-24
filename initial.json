@@ -1,8 +1,14 @@
 {"Intents" : [
     {"Name":"Buying", "Examples": ["Can I buy {Program} for {OS}?", "How much does {Program} cost?"]},
-    {"Name":"Weather", "Examples": ["What is the weather like today?", "How is the weather?"]}
+    {"Name":"Weather", "Examples": ["What is the weather like today?", "How is the weather?"]},
+    {"Name" : "Greeting", "Examples": ["hi", "hello","good morning","welcome"]},
+    {"Name" : "Order", "Examples": ["I want to order", "order", "order me"]},
+    {"Name" : "Question", "Examples": ["can you", "what is", "show me all", "show me only", "I want to know about", "give me"]}
 ], 
 "Entities": {
     "Program": ["Word", "Excel", "PowerPoint"], 
-    "OS": ["Windows", "Linux", "MacOS"]
+    "OS": ["Windows", "Linux", "MacOS"],
+    "Socket" : ["e4", "e6", "e7", "e22", "e45", "e13", "e21", "e3", "e2", "e1", "e5", "gu10", "e27"],
+    "productID" : ["ID112","ID113","ID114","ID115","ID116","ID117","ID118","ID119","ID120","ID121","ID122","ID123"],
+    "name" : ["Alex", "Aleksandrs", "Ruslans", "Romans", "Viktorija", "Anna"]
 }}
