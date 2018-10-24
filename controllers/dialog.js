@@ -67,7 +67,9 @@ async function dialogFlow(body) {
         
         templateStatus = await validateTemplate()
         if (templateStatus) {
-            return `${responses[body.intent]['done']} Request details : Name - ${orderTemplate['Name']} and Product - ${orderTemplate['productID']}`
+            var responseString = `${responses[body.intent]['done']} Request details : Name - ${orderTemplate['Name']} and Product - ${orderTemplate['productID']}`
+            orderTemplate = {}
+            return responseString
         } else {
             return responses.Order['noData']
         }
