@@ -75,7 +75,7 @@ async function dialogFlow(body) {
         }
     } 
     
-    return responses['None']
+    return responses[body.intent]
 }
 
 
