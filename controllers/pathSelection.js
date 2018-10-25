@@ -27,8 +27,6 @@ const done = (err, body, result) =>{
             }
         if (body.entities){
             body.entities.forEach(entity => {
-                // entities = {}
-                // entities["type"] = entity.entity;
                 entities[entity.entity] = entity.value;
                 entitiesList.push(entities);
             });
@@ -39,8 +37,6 @@ const done = (err, body, result) =>{
     if (body.topScoringIntent){
         intentList.push(body.topScoringIntent.intent);
         body.entities.forEach(entity => {
-            // entities = {}
-            // entities["type"] = entity.type;
             entities[entity.type] = entity.entity;
             entitiesList.push(entities);
         });
@@ -51,8 +47,6 @@ const done = (err, body, result) =>{
         intentList.push(body.intentName)
         if(body.slots){
             Object.keys(body.slots).forEach( entityName => {
-                // entities = {}
-                // entities["type"] = entityName;
                 entities[entityName] = body.slots[entityName];
                 entitiesList.push(entities);
             })
@@ -62,7 +56,6 @@ const done = (err, body, result) =>{
 
     //Combined entities
     console.log(intentList)
-    // if (intentList.length == config.active.length){
         var reducedList = intentList.reduce(function (map, word){
             map[word] = ( map[word] || 0) + 1;
             return map;
@@ -71,34 +64,15 @@ const done = (err, body, result) =>{
         var maxIntent = Object.keys(reducedList).find(function(a) {
                 return reducedList[a] === maxValue
             });
-        // console.log(intentList)
-        // console.log(reducedList)
-        // var res = Math.max.apply(Math,intentList.map(function(o){
-        //     if (o.intent == "None"){o.score = 0}
-        //     return o.score;}))
-        // var obj = intentList.find(function(o){ return o.score == res; })
         responseList["entities"] = entities;
         responseList["intent"] = maxIntent;
         
         result(responseList)
-    // }
-    
-    //Choosing the top intent
 
 }
 
 
 module.exports = (bot, text, response) => {
-    // if (bot.indexOf('aws') >= 0){ getAwsIntent(message,done) }
-    // if (bot.indexOf('luis') >= 0){ getLuisIntent(message,done) }
-    // if (bot.indexOf('watson') >= 0){ getWatsonIntent(message,done) }
-
-    // async function waitAll(){
-    //     await getLuisIntent(message)
-    //     await console.log("I was waiting like a boss")
-    //     await console.log(responseList)
-    //     await response(responseList)
-    // }
  async function promiseWrap(notWrapedFunction) {
         return new Promise(resolve => {
             notWrapedFunction(text,(err,body) => {
@@ -112,22 +86,12 @@ module.exports = (bot, text, response) => {
 
     // waitAll()
 async function run() {
-    // await promiseWrap(getLuisIntent)
-    await promiseWrap(getWatsonIntent)
-    // await promiseWrap(getAwsIntent)
+    if (config.active.indexOf("luis") > -1) await promiseWrap(getLuisIntent);
+    if (config.active.indexOf("watson") > -1) await promiseWrap(getWatsonIntent)
+    if (config.active.indexOf("aws") > -1) await promiseWrap(getAwsIntent)
     intentList = []
     entities = {}
     response(null,responseList)
 }
 run ()
-        // .then(promiseWrap(getWatsonIntent)
-        //     .then(promiseWrap(getAwsIntent)
-        //     .then(() => {
-        //         console.log("AAAAAA",intentList)
-        //         intentList = []
-        //         entities = {}
-        //         response(null,responseList)
-        //         // getWatsonIntent = null
-        //     }))
-        // )
 }
