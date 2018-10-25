@@ -1,14 +1,17 @@
 const processFacebookMessage = require('../helpers/processFacebookMessage');
-var watson = require('./watson')
+const getIntents = require('./pathSelection')
+const dialog = require('./dialog')
+var config = require('../config')
 
 module.exports = (req, res) => {
     if (req.body.object === 'page') {
         req.body.entry.forEach(entry => {
             entry.messaging.forEach(event => {
                 if (event.message && event.message.text) {
-                    watson(event.message.text,function done(err,callback)
-                    {
-                        processFacebookMessage(event.sender.id, callback.output.generic[0].text)
+                    getIntents(config.active, event.message.text, function (err, body){
+                        dialog(body,resMessage => {
+                            processFacebookMessage(event.sender.id,resMessage)
+                        })
                     })
                 }
             });

@@ -1,4 +1,3 @@
-var watson = require('../controllers/watson')
 const Discord = require("discord.js");
 var auth = require('./auth.json');
 var config = require('../config')
