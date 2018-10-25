@@ -55,8 +55,9 @@ function addIntent(name, ModExamples, slots, response) {
         lexmodelbuildingservice.putIntent(params, function(err, data){
             if (err) {
                 console.log(err.message)
-            }
-            response(null,data)
+            } 
+            if (checksum) {response("1",data); }
+            else {response("$LATEST",data);}
         })
     })
 }
@@ -74,15 +75,26 @@ async function runLoop(){
             entityList = getExamples.getTextEntities(example,  Object.keys(initial["Entities"]))
             entityList.forEach(entity => {
                 if (slots["entities"].indexOf(entity) == -1){
+                    sampleUtterances = []
+                    intent["Examples"].forEach(example =>{
+                        results = getExamples.getTextEntities(example, Object.keys(initial["Entities"]))
+                        results.forEach(foundEntity =>{
+                            if (entity!=foundEntity){
+                                sampleUtterances.push(example.replace(`{`+foundEntity+`}`, initial["Entities"][foundEntity][0]))
+                            }
+                        })
+                    })
+                    
                     slot = {
                         "name": entity, 
                         "description": "", 
                         "priority": 1, 
-                        "sampleUtterances": intent["Examples"], 
+                        "sampleUtterances": [], 
                         "slotConstraint": "Optional", 
                         "slotType": entity+`Type`, 
                         "slotTypeVersion": "$LATEST", 
                     }
+                    console.log(slot["sampleUtterances"])
                     slots["slots"].push(slot)
                     slots["entities"].push(entity)
                 }
@@ -94,7 +106,7 @@ async function runLoop(){
 }
 
 
-async function putSlotType() {
+async function putSlotType(callback) {
     createdTypes = []
     Object.keys(initial["Entities"]).forEach(entity => {
             getSlotTypeChecksum(entity+`Type`, function(checksum){
@@ -115,7 +127,8 @@ async function putSlotType() {
                     console.log(err.message)
                 }                
                 if (Object.keys(initial["Entities"]).length == createdTypes.length) {
-                        putIntent()
+                        console.log("SlotTypes created")
+                        putIntent(callback)
                 }
             })
         })
@@ -125,25 +138,26 @@ async function putSlotType() {
 
 async function putIntent(){
     intents = await runLoop()
-    done = []
+    done = {}
     intents.forEach(intent => {
         addIntent(intent[0], intent[1], intent[2], function(err, data){
-            done.push(data)
-            if (intents.length == done.length){
-                updateBot()
+            done[intent[0]]= err
+            if (intents.length == Object.keys(done).length){
+                console.log("Intents created")
+                updateBot(done, createIntentVersions)
             }
             
         })
     })
 }
 
-async function updateBot(){
+async function updateBot(done, callback){
         getBotData(function(checksum){
         payload =[]
         initial["Intents"].forEach(intent => {
             payload.push({
                 intentName: intent["Name"], 
-                intentVersion: "$LATEST"
+                intentVersion: done[intent["Name"]]
                 })
         })
         var params = {
@@ -158,7 +172,7 @@ async function updateBot(){
                     content: "Can you repeate what you just said?", 
                     contentType: "PlainText",
                     groupNumber: 1
-                  }]
+                }]
             },
             abortStatement: {
                 messages: [ 
@@ -168,13 +182,14 @@ async function updateBot(){
                     groupNumber: 1
                   }
                 ]
-
-              }
+            }
         }
-        console.log(params)
         lexmodelbuildingservice.putBot(params, function(err, data) {
-            if (err) {console.log(err);}
-            else  {   console.log(data);  }
+            if (err) {console.log(err.message);}
+            else { 
+                callback(done, config.aws.botName, checksum);
+                console.log("Bot Update completed")
+            }
         })
     })
 }
@@ -190,5 +205,39 @@ async function getBotData(response){
       });
 }
 
-putSlotType()
+function publishBot(done, name, checksum){
+    var params = {
+        name: name,
+        checksum: checksum
+    };
+    lexmodelbuildingservice.createBotVersion(params, function(err, data) {
+        if (err) console.log(err.message); // an error occurred
+        else     console.log(data);           // successful response
+    });
+}
+
+function createIntentVersions(intentVersions){
+    done = {}
+    Object.keys(intentVersions).forEach(intent => {
+        if (intentVersions[intent] == "$LATES"){
+            getIntentChecksum(intent, function(checksum){
+                lexmodelbuildingservice.createIntentVersion({name: intent, checksum: checksum}, function(err, data) {
+                    if (err) console.log("Create Intent version error: ", err.message); // an error occurred
+                    else {
+                        done[intent] = "1"
+                        console.log(intent, "version created")
+                    }
+                }) 
+            })
+        }
+        else done[intent] = "1"
+        if (Object.keys(intentVersions).length==Object.keys(done).length){
+            console.log("Intent Versions created")
+            updateBot(done, publishBot)
+        }
+    })
+}
+
+
+putSlotType(createIntentVersions)
 
