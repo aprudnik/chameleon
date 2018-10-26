@@ -74,22 +74,24 @@ const addExample = (text, Intent_name, entityList) => {
 
 
 
-async function runLoop() {
+async function runLoop(callback) {
     initial = getExamples.getJson()
     Object.keys(initial["Entities"]).forEach((entity,index0) =>{
         setTimeout(function(){createLuisVar("Entities", entity, return_response)}, index0*500)
     })
-    jsonToSend = []
-    initial["Intents"].forEach((value, index1) => {
-        setTimeout(function(){createLuisVar("Intents", value["Name"], return_response)}, 500*index1)
-        value["Examples"].forEach((example) =>{
-            listToSend = getExamples.makeList(initial["Entities"], example)
-            listToSend.forEach((textToSend) => {
-                    jsonToSend.push(addExample(textToSend[0], value["Name"], textToSend.slice(1), return_response));
+    setTimeout(function(){
+        jsonToSend = []
+        initial["Intents"].forEach((value, index1) => {
+            setTimeout(function(){createLuisVar("Intents", value["Name"], return_response)}, 500*index1)
+            value["Examples"].forEach((example) =>{
+                listToSend = getExamples.makeList(initial["Entities"], example)
+                listToSend.forEach((textToSend) => {
+                        jsonToSend.push(addExample(textToSend[0], value["Name"], textToSend.slice(1), return_response));
+                })
             })
         })
-    })
-    return jsonToSend
+        callback(jsonToSend)
+    }, Object.keys(initial["Entities"])*500)  
 }
 
 function waitPublish(){
@@ -107,24 +109,26 @@ function waitPublish(){
 }
 
 async function trainLuis(callback) {
-    toSend = await runLoop()
-    setTimeout(function(){
-    url_to_send = url + `examples` + `?subscription-key=e17b1f8d66d3410abadc94ac2ceb1ce9`
-    
-    //console.log(JSON.stringify(toSend))
-    request.post({
-        url: url_to_send,
-        body : JSON.stringify(toSend)
-    },
-    function(error, response, body){
-        
-        createLuisVar("Train", "", function(error, response, body){
-            waitPublish()
-            //
-        })
-        callback(error, response, body)
+    await runLoop(function(toSend){
+        console.log(toSend)
+        setTimeout(function(){
+            url_to_send = url + `examples` + `?subscription-key=e17b1f8d66d3410abadc94ac2ceb1ce9`
+            
+            //console.log(JSON.stringify(toSend))
+            request.post({
+                url: url_to_send,
+                body : JSON.stringify(toSend)
+            },
+            function(error, response, body){
+                
+                createLuisVar("Train", "", function(error, response, body){
+                    waitPublish()
+                    //
+                })
+                callback(error, response, body)
+            })
+        }, 1000*( Object.keys(initial["Entities"]).length + initial["Intents"].length))
     })
-}, 1000*( Object.keys(initial["Entities"]).length + initial["Intents"].length))
 }
 
 main = () => {

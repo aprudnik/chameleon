@@ -73,11 +73,11 @@ const done = (err, body, result) =>{
 
 
 module.exports = (bot, text, response) => {
- async function promiseWrap(notWrapedFunction) {
+ async function promiseWrap(notWrapedFunction, name) {
         return new Promise(resolve => {
             notWrapedFunction(text,(err,body) => {
                 done(null,body,(result) => {
-                    console.log("Promise wrap")
+                    console.log(name)
                     resolve(result)
                 })
             })
@@ -86,9 +86,9 @@ module.exports = (bot, text, response) => {
 
     // waitAll()
 async function run() {
-    if (config.active.indexOf("luis") > -1) await promiseWrap(getLuisIntent);
-    if (config.active.indexOf("watson") > -1) await promiseWrap(getWatsonIntent)
-    if (config.active.indexOf("aws") > -1) await promiseWrap(getAwsIntent)
+    if (config.active.indexOf("luis") > -1) await promiseWrap(getLuisIntent, "LUIS");
+    if (config.active.indexOf("watson") > -1) await promiseWrap(getWatsonIntent, "Watson")
+    if (config.active.indexOf("aws") > -1) await promiseWrap(getAwsIntent, "aws")
     intentList = []
     entities = {}
     response(null,responseList)

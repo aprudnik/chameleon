@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => res.send('Hello, I am Chameleon!'))
 app.get('/text', (req, res) => 
-    getIntents(config.active, req.query, function (err, body){
+    getIntents(config.active, req.query.message, function (err, body){
          res.send(body)}
     )) 
 app.get('/verify', verificationControllerFacebook);
