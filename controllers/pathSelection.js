@@ -1,8 +1,8 @@
-const config = require('../config')
+const config = require('../conf/config')
 
-const getLuisIntent = require('../controllers/luis')
-const getWatsonIntent = require('../controllers/watson')
-const getAwsIntent = require('../controllers/awsLex')
+const getLuisIntent = require('../nl-assistant/luis')
+const getWatsonIntent = require('../nl-assistant/watson')
+const getAwsIntent = require('../nl-assistant/awsLex')
 var Promise = require('promise');
 
 var responseList = {}

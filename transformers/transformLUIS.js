@@ -1,6 +1,6 @@
 const request = require('request');
-var config = require('../config')
-const getExamples = require('./getExamples');
+var config = require('../conf/config')
+const getExamples = require('../controllers/getExamples');
 
  
 

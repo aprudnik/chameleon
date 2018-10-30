@@ -1,0 +1,8 @@
+ProductID,price,name,item,category,top,capacity
+hd0001,40.72,Seagate BarraCuda 1TB 7200RPM SATA III 64MB ST1000DM010,HDD,computer,true,1TB
+hd0001,109.80,Seagate Barracuda 4TB 5400RPM SATAIII 256MB ST4000DM004,HDD,computer,false,4TB
+hd0001,180.67,Seagate SkyHawk 6TB 7200RPM SATAIII 256MB ST6000VX0023,HDD,computer,false,6TB
+
+
+
+

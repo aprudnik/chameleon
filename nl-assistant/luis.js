@@ -1,5 +1,5 @@
 const request = require('request');
-var config = require('../config')
+var config = require('../conf/config')
 
 const GetIntent = (text, callback)  => {
     url_to_send = config.luis.url + text

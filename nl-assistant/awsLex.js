@@ -1,5 +1,5 @@
 var AWS = require('aws-sdk');
-var config = require('../config')
+var config = require('../conf/config')
 
 AWS.config.region = config.aws.region; // Region
         AWS.config.credentials = new AWS.CognitoIdentityCredentials({

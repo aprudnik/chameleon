@@ -2,7 +2,7 @@
 // receives response.
 
 var AssistantV1 = require('watson-developer-cloud/assistant/v1');
-var config = require('../config')
+var config = require('../conf/config')
 
 // Set up Assistant service wrapper.
 var service = new AssistantV1({

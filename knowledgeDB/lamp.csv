@@ -1,0 +1,17 @@
+ProductID,socket,lumen,price,name,item,category,top
+el0001,e27,1000,11.99,TRADFRI,lamp,electronics,true
+el0002,gu10,400,3.49,LEDARE,lamp,electronics,false
+el0003,e27,400,6.60,Philips,lamp,electronics,false
+el0004,gu10,400,3.49,LEDARE,lamp,electronics,false
+el0005,E27,1000,1.19,VISIONAL LED PREMIUM 10W SAMSUNG 360,lamp,electronics,false
+el0006,E14,556,1.40,WHITENERGY LED BULB E14 7W WARM WHITE,lamp,electronics,false
+el0007,E27,1200,1.9,VISIONAL LED PREMIUM 12W SAMSUNG 360,lamp,electronics,false
+el0008,E27,396,1.00,WHITENERGY LED BULB 5W WARM WHITE,lamp,electronics,false
+el0009,E14,580,1.50,ESPERANZA LED ELL152 E14 6W 580LM,lamp,electronics,false
+el0010,E27,630,0.50,BESK HAL ECO A55 42W 105854,lamp,electronics,false
+el0011,E27,806,2.20,LEDURO LED FILAMENT LAMP A60 E27 6.5W,lamp,electronics,false
+
+
+
+
+

@@ -1,7 +1,7 @@
 const processFacebookMessage = require('../helpers/processFacebookMessage');
 const getIntents = require('./pathSelection')
 const dialog = require('./dialog')
-var config = require('../config')
+var config = require('../conf/config')
 
 module.exports = (req, res) => {
     if (req.body.object === 'page') {

@@ -2,7 +2,9 @@
     "requiredEntities"	: [],
     "optionalEntitities" : ["socket"],
     "reqEntityRequest": {},
-    "completionAction": "search"
+    "completionAction": "search",
+    "response" : "Items that I have found : \n",
+    "failResponse" : "Sorry we dont have such Item. Mybe you need something else? \n"
     },
 "Greeting" : {
     "requiredEntities"	: [],
@@ -23,9 +25,17 @@
     "optionalEntitities" : [],
     "reqEntityRequest": {
         "name": "Could you please provide your name for the order?",
-        "productID" : "Sorry, I missed the product ID"    
+        "productID" : "Could you please provide product ID you want to order?"    
         },
     "completionConfirmation" : "Your order is {productID} delivered to {name}, is this correct?",
     "completionAction": "order"
+    },
+"topOffers" : {
+    "requiredEntities"	: [],
+    "optionalEntitities" : [],
+    "reqEntityRequest": {},
+    "completionAction": "topOffers",
+    "response" : "Best offers are : \n",
+    "failResponse" : "Sorry we dont have best offers for you? \n"
     }
 }

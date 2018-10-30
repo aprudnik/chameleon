@@ -1,6 +1,6 @@
 var discordMessage = require('../controllers/discord')
 const request = require('request');
-var watson = require('../controllers/watson')
+var watson = require('../nl-assistant/watson')
 
 const sendTextMessage = (channel, user, text) => {
     token = "xoxb-448604844673-449223431682-XIZX0GLl04UQT7kFi08erdft"

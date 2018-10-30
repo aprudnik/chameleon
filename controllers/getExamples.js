@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-let rawdata = fs.readFileSync('../initial.json');  
+let rawdata = fs.readFileSync('../conf/initial.json');  
 let initial = JSON.parse(rawdata); 
 
 const makeList= (paramExampleDict, text) => {

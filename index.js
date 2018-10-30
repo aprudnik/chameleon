@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-var config = require('./config')
+var config = require('./conf/config')
 
 
 const app = express();
@@ -11,7 +11,7 @@ const verificationControllerSlack = require('./controllers/slackVerification');
 const messageWebhookController = require('./controllers/messageWebhook');
 const discordBot = require('./controllers/discord')
 const getIntents = require('./controllers/pathSelection')
-const awsLex = require('./controllers/awsLex')
+const awsLex = require('./nl-assistant/awsLex')
 const dialog = require('./controllers/dialog')
 
 app.use(bodyParser.json());
