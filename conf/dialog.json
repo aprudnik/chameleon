@@ -3,8 +3,9 @@
     "optionalEntitities" : ["socket"],
     "reqEntityRequest": {},
     "completionAction": "search",
+    "searchFieldExceptions" : ["sys-number","less"],
     "response" : "Items that I have found : \n",
-    "failResponse" : "Sorry we dont have such Item. Mybe you need something else? \n"
+    "failResponse" : "Sorry we dont have such Item. Maybe you need something else? \n"
     },
 "Greeting" : {
     "requiredEntities"	: [],

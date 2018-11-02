@@ -21,6 +21,7 @@ config.watson.password = 'ooYfoLy4eMAJ'
 config.watson.version = '2018-07-10'
 
 config.discord.channelId = '497380218701611011'
+config.discord.token = "NDk3Mzc4NTExNjE5NjIwODg1.Drr1qw.YPwxDPwDeX8YA_UEHjLah45mEI4"
 
 config.luis.url = `https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/4fb9c915-be86-4951-b5ab-a2593798d264?subscription-key=e17b1f8d66d3410abadc94ac2ceb1ce9&timezoneOffset=-360&q=`
 config.luis.apiURL = `https://westus.api.cognitive.microsoft.com/luis/api/v2.0/apps/4fb9c915-be86-4951-b5ab-a2593798d264/versions/0.1/`

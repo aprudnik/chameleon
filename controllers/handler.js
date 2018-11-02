@@ -17,6 +17,14 @@ Handler = {}
 
 Handler.entities = []
 
+async function getCompare(mainList,varList){
+    for (const el of mainList){
+        var index = varList.indexOf(el)
+        if (index > -1) { return el}
+    }
+    return 'None'
+}
+
 async function jsonToTemplate (jsonObject) {
     var returnString = ""
     Object.keys(jsonObject).forEach(element => {
@@ -78,12 +86,29 @@ Handler.order = async function (dialogSet, intent, entities, response) {
 }
 
 Handler.search = async function (dialogSet, intent, entities, response) {
+    if (Object.keys(entities).length == 0) {return dialogSet.failResponse}
     var results = []
     var returnString = dialogSet.response
     var jsonArray = await loadData()
     results = jsonArray
+    var removedEntities = {}
+    var compareMetricList = ["less","more"]
+    var searchSymb = await getCompare(Object.keys(entities),compareMetricList)
+    for (const value of dialogSet.searchFieldExceptions){
+        removedEntities[value] = entities[value]
+        delete entities[value]
+    }
     for (const entity of Object.keys(entities)) {
-        results = await getDataFromDB(results,entity,response.entities[entity])
+        if (entity == "metrics") {
+            searchField = entities[entity]
+            searchValue = removedEntities['sys-number']
+            curSymb = searchSymb
+        } else {
+            searchField = entity
+            searchValue = entities[entity]
+            curSymb = 'None'
+        }
+        results = await getDataFromDB(results,searchField,searchValue,curSymb)
     }
     for (const value of results){
         returnString += await jsonToTemplate(value)
@@ -111,13 +136,21 @@ Handler.topOffers = async function (dialogSet, intent, entities, response){
 
 }
 
-async function getDataFromDB(db,fieldName,fieldValue){
+async function getDataFromDB(db,fieldName,fieldValue,compare){
     // Should be DB query generation CSV read for POC
     var resultList = []
     async function find() {
         db.forEach((object) => {
-            if (object[fieldName] == fieldValue){
-                resultList.push(object)
+            switch(compare) {
+                case "less" : 
+                    if (Number(object[fieldName]) < Number(fieldValue)){ resultList.push(object) };
+                    break;
+                case "more" :
+                    if (Number(object[fieldName]) > Number(fieldValue)){ resultList.push(object) };
+                    break;
+                default:
+                    if (object[fieldName] == fieldValue){resultList.push(object)};
+                    break;
             }
         })
     }

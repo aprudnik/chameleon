@@ -1,12 +1,11 @@
 const Discord = require("discord.js");
-var auth = require('../conf/auth.json');
 var config = require('../conf/config')
 const getIntents = require('./pathSelection')
 const dialog = require('./dialog')
 
 const client = new Discord.Client();
 
-client.login(auth.token);
+client.login(config.discord.token);
     
 client.on("ready", () => {
     console.log("I am ready!");
@@ -14,6 +13,7 @@ client.on("ready", () => {
     
 client.on("message", (message) => {
     if (message.content.startsWith("!")) {
+        message.content = message.content.substr(1)
         getIntents(config.active, message.content, function (err, body){
             console.log("Discord log : ",body)
             dialog(body,resMessage => {message.channel.send(resMessage)})

@@ -15,7 +15,7 @@
 "Entities": {
     "category" : ["electronics", "computer", "kitchen", "appliances"],
     "item" : [ "lamp", "HDD", "kettle", "lamps", "HDDs", "kettles" ],
-
+    "metrics" : ["lumen", "price"],
     "less" : ["less", "cheaper", "<", "smaller", "lower", "not more"],
     "cheap" : ["cheap", "cheapest", "not expensive"],
     "socket" : ["e4", "e6", "e7", "e22", "e45", "e13", "e21", "e3", "e2", "e1", "e5", "gu10", "e27"],
