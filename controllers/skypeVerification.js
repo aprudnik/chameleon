@@ -18,7 +18,7 @@ userState = new UserState(memoryStorage);
 async function getReply(text, callback) {
     await getIntents(config.active, text, async function (err, body){
         await dialog(body,async function(resMessage) {
-            await callback(resMessage)
+            callback(resMessage)
         })
     })
 }
@@ -34,10 +34,10 @@ try {
 
 
 module.exports = async function (req, res) {
-    await getReply(req.body.text, async function (reply) {
-        console.log("Skype message received")
+    getReply(req.body.text, async function (reply) {
+        console.log("Skype message received, answer="+reply)
         // Route received a request to adapter for processing
-         adapter.processActivity(req, res, async (turnContext) => {
+        adapter.processActivity(req, res, async (turnContext) => {
             // route to bot activity handler.
             await bot.onTurn(turnContext, reply);
         })
