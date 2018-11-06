@@ -35,6 +35,7 @@ try {
 
 module.exports = async function (req, res) {
     await getReply(req.body.text, async function (reply) {
+        console.log("Skype message received")
         // Route received a request to adapter for processing
          adapter.processActivity(req, res, async (turnContext) => {
             // route to bot activity handler.
