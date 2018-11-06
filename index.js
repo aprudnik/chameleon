@@ -5,6 +5,7 @@ var config = require('./conf/config')
 
 const app = express();
 
+
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 const verificationControllerFacebook = require('./controllers/verification');
 const verificationControllerSlack = require('./controllers/slackVerification');
@@ -17,11 +18,7 @@ const dialog = require('./controllers/dialog')
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-gText = ""
-function getText(text){
-    gText = text
-    return text
-}
+
 
 app.get('/', (req, res) => res.send('Hello, I am Chameleon!'))
 app.get('/text', (req, res) => 
@@ -30,8 +27,7 @@ app.get('/text', (req, res) =>
     )) 
 app.get('/verify', verificationControllerFacebook);
 app.post('/slack', verificationControllerSlack);
-app.post('/skype',  (req, res) => {res.send("200"); getText(req.body);return req});//verificationControllerSkype);
-app.get('/skype', (req, res) => res.send(gText))
+app.post('/skype', verificationControllerSkype);
 app.post('/verify', messageWebhookController);
 app.get('/changeBot/:bot', (req,res) => {
     const params = req.params

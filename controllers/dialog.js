@@ -28,7 +28,7 @@ async function dialog(response, returnResponse) {
             returnResponse(dialogSet[intent]["reqEntityRequest"][missingEntity])
         })
         if (foundEntities.length == dialogSet[intent]["requiredEntities"].length){
-            returnResponse (await Handler[dialogSet[intent].completionAction](dialogSet[intent], intent, entities, response))
+            await returnResponse (await Handler[dialogSet[intent].completionAction](dialogSet[intent], intent, entities, response))
             // returnResponse( await startFunction(dialogSet[intent], intent, entities, response))
             setCurrentIntent(null)
             entities = []
