@@ -149,7 +149,7 @@ async function getDataFromDB(db,fieldName,fieldValue,compare){
                     if (Number(object[fieldName]) > Number(fieldValue)){ resultList.push(object) };
                     break;
                 default:
-                    if (object[fieldName] == fieldValue){resultList.push(object)};
+                    if (fieldValue.indexOf(object[fieldName]) > -1){resultList.push(object)};
                     break;
             }
         })
