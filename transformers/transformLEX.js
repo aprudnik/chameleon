@@ -74,17 +74,7 @@ async function runLoop(){
         intent["Examples"].forEach(example => {
             entityList = getExamples.getTextEntities(example,  Object.keys(initial["Entities"]))
             entityList.forEach(entity => {
-                if (slots["entities"].indexOf(entity) == -1){
-                    sampleUtterances = []
-                    intent["Examples"].forEach(example =>{
-                        results = getExamples.getTextEntities(example, Object.keys(initial["Entities"]))
-                        results.forEach(foundEntity =>{
-                            if (entity!=foundEntity){
-                                sampleUtterances.push(example.replace(`{`+foundEntity+`}`, initial["Entities"][foundEntity][0]))
-                            }
-                        })
-                    })
-                    
+                if (slots["entities"].indexOf(entity) == -1){                    
                     slot = {
                         "name": entity, 
                         "description": "", 
@@ -94,7 +84,7 @@ async function runLoop(){
                         "slotType": entity+`Type`, 
                         "slotTypeVersion": "$LATEST", 
                     }
-                    console.log(slot["sampleUtterances"])
+                    //console.log(slot["sampleUtterances"])
                     slots["slots"].push(slot)
                     slots["entities"].push(entity)
                 }

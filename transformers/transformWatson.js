@@ -37,9 +37,17 @@ initial["Intents"].forEach(intent => {
 
 Object.keys(initial["Entities"]).forEach(entity => {
     values = []
-    initial["Entities"][entity].forEach(value =>{
-        values.push({"value" : value})
-    })
+    if (Array.isArray(initial["Entities"][entity])) {
+        initial["Entities"][entity].forEach(value =>{
+            values.push({"value" : value})
+        })
+    } else {
+        Object.keys(initial["Entities"][entity]).forEach(value =>{
+            values.push({"value" : value,
+                        "synonyms": initial["Entities"][entity][value]
+            })
+        })
+    }
     var params = {
         workspace_id: config.watson.workspace_id,
         entity: entity,

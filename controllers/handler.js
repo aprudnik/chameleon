@@ -140,6 +140,7 @@ async function getDataFromDB(db,fieldName,fieldValue,compare){
     // Should be DB query generation CSV read for POC
     var resultList = []
     async function find() {
+        
         db.forEach((object) => {
             switch(compare) {
                 case "less" : 

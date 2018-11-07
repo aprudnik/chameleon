@@ -36,8 +36,17 @@ const done = (err, body, result) =>{
     //LUIS json parse
     if (body.topScoringIntent){
         intentList.push(body.topScoringIntent.intent);
+        
         body.entities.forEach(entity => {
-            entities[entity.type] = entity.entity;
+            if (entity.resolution.values) {
+                entities[entity.type] = entity.resolution.values[0];
+            } else {
+                if (entity.type == "builtin.number") {
+                    entities["sys-number"] = entity.resolution.value
+                } else {
+                    entities[entity.type] = entity.resolution.value
+                }
+            }
             entitiesList.push(entities);
         });
     }

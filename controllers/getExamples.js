@@ -8,17 +8,30 @@ const makeList= (paramExampleDict, text) => {
     ModExamples = []
     response = []
     text = [text]
+
     if (paramNameList.length>0){
         paramNameList.forEach((param, numParam) => {
-            paramExampleDict[param].forEach((value, index) => {
-                text.forEach(example =>{
-                    paramStart = example.indexOf(`{`+param+`}`)-numParam*3
-                    if (paramStart > -1){
-                        paramEnd = paramStart + value.length-1
-                        ModExamples.push(index+ `||` + example.replace(`{`+param+`}`,value) + `$${param}-${paramStart}-${paramEnd}`)
-                    }
-                })  
-            })
+            if (Array.isArray(paramExampleDict[param])) {
+                paramExampleDict[param].forEach((value, index) => {
+                    text.forEach(example =>{
+                        paramStart = example.indexOf(`{`+param+`}`)-numParam*3
+                        if (paramStart > -1){
+                            paramEnd = paramStart + value.length-1
+                            ModExamples.push(index+ `||` + example.replace(`{`+param+`}`,value) + `$${param}-${paramStart}-${paramEnd}`)
+                        }
+                    })  
+                })
+            } else {
+                Object.keys(paramExampleDict[param]).forEach((value, index) => {
+                    text.forEach(example =>{
+                        paramStart = example.indexOf(`{`+param+`}`)-numParam*3
+                        if (paramStart > -1){
+                            paramEnd = paramStart + value.length-1
+                            ModExamples.push(index+ `||` + example.replace(`{`+param+`}`,value) + `$${param}-${paramStart}-${paramEnd}`)
+                        }
+                    })  
+                })
+            }
             text = ModExamples
         })
         ModExamples.forEach(example =>{
@@ -26,6 +39,7 @@ const makeList= (paramExampleDict, text) => {
                 temp = []
                 output = example.split("||")
                 temp = output[output.length-1].split("$")
+                //console.log(temp)
                 response.push(temp)
             }
         })

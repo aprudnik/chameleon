@@ -13,16 +13,17 @@
     {"Name" : "topOffers", "Examples": ["best offers", "top offers", "best deals", "top deals"]}
 ], 
 "Entities": {
-    "category" : ["electronics", "computer", "kitchen", "appliances"],
-    "item" : [ "lamp", "HDD", "kettle", "lamps", "HDDs", "kettles" ],
-    "metrics" : ["lumen", "price"],
-    "less" : ["less", "cheaper", "<", "smaller", "lower", "not more"],
+    "category" : {"electronics": [], "computer": [], "kitchen": [], "appliances": []},
+    "item" : { "lamp": ["lamps", "bulbs", "bulb"], "HDD": ["HDDs", "hard drive", "hard drives"], "kettle": ["kettles"]},
+    "metrics" : {"lumen": [], "price": []},
+    "less" : {"less": ["<", "smaller", "cheaper", "lower", "dimmer", "not more"]},
+    "more" : {"more": [ "bigger", "brighter", "higher", ">"]},
     "cheap" : ["cheap", "cheapest", "not expensive"],
     "socket" : ["e4", "e6", "e7", "e22", "e45", "e13", "e21", "e3", "e2", "e1", "e5", "gu10", "e27"],
     "productID" : ["ID112","ID113","ID114","ID115","ID116","ID117","ID118","ID119","ID120","ID121","ID122","ID123",
          "hd0001", "hd0002", "hd0003",
          "ke0001", "ke0002", "ke0003",
          "el0001", "el0002", "el0003","el0004", "el0005", "el0006","el0007", "el0008", "el0009","el0010", "el0011", "el0012"
-        ],
+    ],
     "name" : ["Alex", "Aleksandrs", "Ruslans", "Romans", "Viktorija", "Anna"]
 }}

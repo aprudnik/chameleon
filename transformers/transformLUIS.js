@@ -15,21 +15,41 @@ const return_response = (error, response, body) => {
 
 const createLuisVar= (type, name, callback)  => {
     url_to_send = url + type + config.luis.subscriptionKey
-    //console.log(url_to_send)
-
     request.post({
         url: url_to_send,
         form: {"name": name}
         },
         function (error, response, body) {
-            
             callback(error, "", body);
             return body
-          }
-          )
-
+          })
 };
 
+
+const createLuisClosedList= (name, valueList, callback)  => {
+    url_to_send = url + `closedlists` + config.luis.subscriptionKey
+    sublist = []
+    Object.keys(valueList).forEach(item =>{
+        sublist.push({
+			"canonicalForm": item,
+			"list": valueList[item]
+		})
+    })
+    body = {"name": name,
+        "sublists": sublist
+        }
+    
+    console.log(sublist[0].list)
+    request.post({
+        url: url_to_send,
+        body: body,
+        json: true
+        },
+        function (error, response, body) {
+            callback(error, "", body);
+            return body
+          })
+};
 
 const publishLuis= (versionId, location, callback)  => {
     url_to_send = config.luis.publishURL + config.luis.subscriptionKey
@@ -77,7 +97,11 @@ const addExample = (text, Intent_name, entityList) => {
 async function runLoop(callback) {
     initial = getExamples.getJson()
     Object.keys(initial["Entities"]).forEach((entity,index0) =>{
-        setTimeout(function(){createLuisVar("Entities", entity, return_response)}, index0*500)
+        if (Array.isArray(initial["Entities"][entity])){
+            setTimeout(function(){createLuisVar("Entities", entity, return_response)}, index0*500)
+        } else {
+            setTimeout(function(){createLuisClosedList(entity, initial["Entities"][entity], return_response)}, index0*500)
+        }
     })
     setTimeout(function(){
         jsonToSend = []
@@ -110,7 +134,7 @@ function waitPublish(){
 
 async function trainLuis(callback) {
     await runLoop(function(toSend){
-        console.log(toSend)
+        //console.log(toSend)
         setTimeout(function(){
             url_to_send = url + `examples` + `?subscription-key=e17b1f8d66d3410abadc94ac2ceb1ce9`
             
