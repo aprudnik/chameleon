@@ -3,7 +3,7 @@
     "optionalEntitities" : ["socket"],
     "reqEntityRequest": {},
     "completionAction": "search",
-    "searchFieldExceptions" : ["sys-number","less", "more"],
+    "searchFieldExceptions" : ["sys-number","comparison"],
     "response" : "Items that I have found : \n",
     "failResponse" : "Sorry we dont have such Item. Maybe you need something else? \n"
     },

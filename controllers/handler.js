@@ -92,22 +92,33 @@ Handler.search = async function (dialogSet, intent, entities, response) {
     var jsonArray = await loadData()
     results = jsonArray
     var removedEntities = {}
-    var compareMetricList = ["less","more"]
-    var searchSymb = await getCompare(Object.keys(entities),compareMetricList)
+    var compareMetricList = ["comparison"] //["less","more"]
+    //var searchSymb = await getCompare(Object.keys(entities),compareMetricList)
+    // for (const value of dialogSet.searchFieldExceptions){
+    //     removedEntities[value] = entities[value]
+    //     delete entities[value]
+    // }
     for (const value of dialogSet.searchFieldExceptions){
-        removedEntities[value] = entities[value]
-        delete entities[value]
+        for (const key of Object.keys(entities)){
+            if (key.indexOf(value)>-1){
+                removedEntities[key] = entities[key]
+                delete entities[key]
+            }
+        }
     }
     for (const entity of Object.keys(entities)) {
-        if (entity == "metrics") {
+        if (entity.indexOf("metrics")>-1) {
+            newKey = entity.split("metrics")
             searchField = entities[entity]
-            searchValue = removedEntities['sys-number']
-            curSymb = searchSymb
+            searchValue = removedEntities['sys-number'+newKey[1]]
+            // curSymb = searchSymb
+            curSymb = removedEntities[`comparison`+newKey[1]]
         } else {
             searchField = entity
             searchValue = entities[entity]
             curSymb = 'None'
         }
+        console.log(searchField,searchValue,curSymb)
         results = await getDataFromDB(results,searchField,searchValue,curSymb)
     }
     for (const value of results){
@@ -150,7 +161,7 @@ async function getDataFromDB(db,fieldName,fieldValue,compare){
                     if (Number(object[fieldName]) > Number(fieldValue)){ resultList.push(object) };
                     break;
                 default:
-                    if (fieldValue.indexOf(object[fieldName]) > -1){resultList.push(object)};
+                    if (fieldValue.toLowerCase().indexOf(object[fieldName].toLowerCase()) > -1){resultList.push(object)};
                     break;
             }
         })

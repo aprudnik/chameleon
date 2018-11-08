@@ -11,6 +11,9 @@ doneWork = []
 entitiesList = []
 var intentList = []
 var entities = {}
+var duplicate = []
+
+const count = (list, searchTerm) => list.filter((x) => x === searchTerm).length
 
 const done = (err, body, result) =>{
     
@@ -26,9 +29,19 @@ const done = (err, body, result) =>{
             intentList.push("None");
             }
         if (body.entities){
+            duplicates = []
+            
             body.entities.forEach(entity => {
-                entities[entity.entity] = entity.value;
+                if (duplicates.indexOf(entity.entity)>-1){
+                    addedKey = count(duplicates, entity.entity)
+                    entities[entity.entity+`-${addedKey}`] = entity.value;
+                } else {
+                    entities[entity.entity] = entity.value;
+                }
+                duplicates.push(entity.entity)
                 entitiesList.push(entities);
+
+
             });
         }
     }
