@@ -7,11 +7,10 @@ var Promise = require('promise');
 
 var responseList = {}
 var entities = {}
-doneWork = []
 entitiesList = []
 var intentList = []
 var entities = {}
-var duplicate = []
+
 
 const count = (list, searchTerm) => list.filter((x) => x === searchTerm).length
 
@@ -22,7 +21,6 @@ const done = (err, body, result) =>{
     }
     //Watson json parse
     if (body.intents){
-        doneWork.push("Watson")
         if (Object.keys(body.intents).length>0){
             intentList.push(body.intents[0].intent);
         } else {
@@ -30,7 +28,6 @@ const done = (err, body, result) =>{
             }
         if (body.entities){
             duplicates = []
-            
             body.entities.forEach(entity => {
                 if (duplicates.indexOf(entity.entity)>-1){
                     addedKey = count(duplicates, entity.entity)
@@ -40,26 +37,35 @@ const done = (err, body, result) =>{
                 }
                 duplicates.push(entity.entity)
                 entitiesList.push(entities);
-
-
             });
         }
     }
 
     //LUIS json parse
     if (body.topScoringIntent){
-        intentList.push(body.topScoringIntent.intent);
+        if (body.topScoringIntent.score > 0.8){
+            intentList.push(body.topScoringIntent.intent);
+        }
+        else {intentList.push("None")}
         
+        duplicates = []        
         body.entities.forEach(entity => {
-            if (entity.resolution.values) {
-                entities[entity.type] = entity.resolution.values[0];
-            } else {
-                if (entity.type == "builtin.number") {
-                    entities["sys-number"] = entity.resolution.value
+            if (count(duplicates, entity.type)>0) addedKey= `-${count(duplicates, entity.type)}`;
+                else addedKey= "";
+            if (entity.resolution){
+                if (entity.resolution.values) {
+                    entities[entity.type+addedKey] = entity.resolution.values[0];
                 } else {
-                    entities[entity.type] = entity.resolution.value
+                    if (entity.type == "builtin.number") {
+                        entities["sys-number"+addedKey] = entity.resolution.value
+                    } else {
+                        entities[entity.type+addedKey] = entity.resolution.value
+                    }
                 }
+            } else {
+                entities[entity.type+addedKey] = entity.entity
             }
+            duplicates.push(entity.type)
             entitiesList.push(entities);
         });
     }

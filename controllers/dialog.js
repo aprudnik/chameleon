@@ -7,60 +7,48 @@ var Handler = require("./handler")
 
 
 entities= {}
+intent = {}
+currentIntent = {}
+askFor = {}
+foundEntities = {}
 
-currentIntent = null
-
-async function dialog(response, returnResponse) {
-    if (currentIntent != null) intent = currentIntent;
-    else intent = response.intent;
-    console.log(intent)
-    entities = Object.assign(entities,response.entities)
-    // Object.keys(response.entities).forEach(entity => {entities.push(entity)})
-    askFor = []
-    foundEntities = []
-    if (Object.keys(dialogSet).indexOf(intent) > -1) {
-        dialogSet[intent]["requiredEntities"].forEach(reqEntity => {
-            if (Object.keys(entities).indexOf(reqEntity) == -1) {askFor.push(reqEntity)}
-            else {foundEntities.push(reqEntity)}
+async function dialog(response, userID, returnResponse) {
+    if (currentIntent[userID] != null) intent[userID] = currentIntent[userID];
+    else intent[userID] = response.intent;
+    if (entities[userID] == null){
+        entities[userID] = Object.assign(response.entities)
+    } else {
+        entities[userID] = Object.assign(entities[userID],response.entities)
+    }
+    askFor[userID] = []
+    foundEntities[userID] = []
+    if (Object.keys(dialogSet).indexOf(intent[userID]) > -1) {
+        dialogSet[intent[userID]]["requiredEntities"].forEach(reqEntity => {
+            if (Object.keys(entities[userID]).indexOf(reqEntity) == -1) {askFor[userID].push(reqEntity)}
+            else {foundEntities[userID].push(reqEntity)}
         });
-        askFor.forEach(missingEntity =>{
-            setCurrentIntent(intent)
-            returnResponse(dialogSet[intent]["reqEntityRequest"][missingEntity])
+        askFor[userID].forEach(missingEntity =>{
+            setCurrentIntent(intent[userID], userID)
+            returnResponse(dialogSet[intent[userID]]["reqEntityRequest"][missingEntity])
         })
-        if (foundEntities.length == dialogSet[intent]["requiredEntities"].length){
-            await returnResponse (await Handler[dialogSet[intent].completionAction](dialogSet[intent], intent, entities, response))
-            // returnResponse( await startFunction(dialogSet[intent], intent, entities, response))
-            setCurrentIntent(null)
-            entities = []
+        if (foundEntities[userID].length == dialogSet[intent[userID]]["requiredEntities"].length){
+            await returnResponse (await Handler[dialogSet[intent[userID]].completionAction](dialogSet[intent[userID]], intent[userID], entities[userID], response))
+            setCurrentIntent(null, userID)
+            entities[userID] = []
         }
     }
     else {
-        setCurrentIntent(null)
+        setCurrentIntent(null, userID)
         returnResponse("Sorry, I didn't understand can you rephrase")
     }
 }
 
 
 
-async function startFunction(dialogSet, intent, entities, response) {
-    namedEntities = []
-    funcName = dialogSet["completionAction"]
-    if (funcName == "response"){
-        return dialogSet["response"]
-    }
-    else {
-        entities.forEach(entity =>{
-            namedEntities.push(`\n${entity}: ${response.entities[entity]}`)
-        })
-        console.log(`Start function ${funcName} for intent ${intent} with entities ${namedEntities}`)
-        return `Start function ${funcName} for intent ${intent} with entities ${namedEntities}`
-    }
+function setCurrentIntent(intent, userID){
+    currentIntent[userID] = intent
 }
 
-function setCurrentIntent(intent){
-    currentIntent = intent
-}
-
-module.exports = async (body,res) => {
-    dialog(body,res)
+module.exports = async (body, userID, res) => {
+    dialog(body, userID, res)
 }

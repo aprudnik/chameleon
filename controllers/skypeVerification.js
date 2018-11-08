@@ -15,9 +15,9 @@ const memoryStorage = new MemoryStorage();
 conversationState = new ConversationState(memoryStorage);
 userState = new UserState(memoryStorage);
 
-async function getReply(text, callback) {
+async function getReply(text, userID, callback) {
     await getIntents(config.active, text, async function (err, body){
-        await dialog(body,async function(resMessage) {
+        await dialog(body, userID, async function(resMessage) {
             callback(resMessage)
         })
     })
@@ -34,7 +34,8 @@ try {
 
 
 module.exports = async function (req, res) {
-    getReply(req.body.text, async function (reply) {
+    console.log(req.body.from.id)
+    getReply(req.body.text, req.body.from.id,  async function (reply) {
         // Route received a request to adapter for processing
         adapter.processActivity(req, res, async (turnContext) => {
             // route to bot activity handler.

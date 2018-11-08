@@ -1,6 +1,6 @@
 {"Intents" : [
     {"Name" : "Greeting", "Examples": ["hi", "hello","good morning","welcome"]},
-    {"Name" : "Order", "Examples": ["I want to order", "order", "order me"]},
+    {"Name" : "Order", "Examples": ["I want to order", "order", "order me", "I would like to order"]},
     {"Name" : "Identity", "Examples": ["who are you", "what can you do"]},
     {"Name" : "Show", "Examples": ["can you show me all {category}", 
                                     "what is", 
