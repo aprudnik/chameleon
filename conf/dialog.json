@@ -8,11 +8,11 @@
     "failResponse" : "Sorry we dont have such Item. Maybe you need something else? \n"
     },
 "Greeting" : {
-    "requiredEntities"	: [],
-    "optionalEntitities" : ["name"],
-    "reqEntityRequest": {},
+    "requiredEntities"	: ["name"],
+    "optionalEntitities" : [],
+    "reqEntityRequest": {"name": "Hello, what is your name?"},
     "completionAction": "response",
-    "response" : "Hello! Welcome to our store!"
+    "response" : "{name}, Welcome to our store!"
     },
 "Identity" : {
     "requiredEntities"	: [],

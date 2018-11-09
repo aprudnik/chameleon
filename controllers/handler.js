@@ -130,7 +130,11 @@ Handler.search = async function (dialogSet, intent, entities, response) {
 }
 
 Handler.response = async function (dialogSet, intent, entities, response){
-    return dialogSet.response
+    text = dialogSet.response
+    for (const entity of Object.keys(entities)){
+        text = text.replace(`{${entity}}`,`${entities[entity]}`)
+    }
+    return text
 }
 
 Handler.topOffers = async function (dialogSet, intent, entities, response){

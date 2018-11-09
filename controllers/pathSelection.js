@@ -84,18 +84,19 @@ const done = (err, body, result) =>{
 
     //Combined entities
     console.log(intentList)
-        var reducedList = intentList.reduce(function (map, word){
-            map[word] = ( map[word] || 0) + 1;
-            return map;
-        }, Object.create(null))
-        var maxValue = Math.max.apply(null, Object.values(reducedList))
-        var maxIntent = Object.keys(reducedList).find(function(a) {
-                return reducedList[a] === maxValue
-            });
-        responseList["entities"] = entities;
-        responseList["intent"] = maxIntent;
-        
-        result(responseList)
+    var reducedList = intentList.reduce(function (map, word){
+        if (word=="None") map[word]=-1;
+        map[word] = ( map[word] || 0) + 1;
+        return map;
+    }, Object.create(null))
+    var maxValue = Math.max.apply(null, Object.values(reducedList))
+    var maxIntent = Object.keys(reducedList).find(function(a) {
+            return reducedList[a] === maxValue
+        });
+    responseList["entities"] = entities;
+    responseList["intent"] = maxIntent;
+    
+    result(responseList)
 
 }
 

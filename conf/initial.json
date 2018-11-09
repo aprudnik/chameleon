@@ -1,5 +1,5 @@
 {"Intents" : [
-    {"Name" : "Greeting", "Examples": ["hi", "hello","good morning","welcome"]},
+    {"Name" : "Greeting", "Examples": ["hi", "hello","good morning","welcome", "hi, i'm name", ""]},
     {"Name" : "Order", "Examples": ["I want to order", "order", "order me", "I would like to order"]},
     {"Name" : "Identity", "Examples": ["who are you", "what can you do"]},
     {"Name" : "Show", "Examples": ["can you show me all {category}", 
@@ -15,9 +15,9 @@
 "Entities": {
     "category" : {"electronics": [], "computer": [], "kitchen": [], "appliances": []},
     "item" : { "lamp": ["lamps", "bulbs", "bulb"], "HDD": ["HDDs", "hard drive", "hard drives"], "kettle": ["kettles"]},
-    "metrics" : {"lumen": ["lumens"], "price": ["euro", "dollars"]},
-    "comparison" : {"less": ["<", "smaller", "cheaper", "lower", "dimmer", "not more"], 
-                    "more": [ "bigger", "brighter", "higher", ">"]},
+    "metrics" : {"lumen": ["lumens"], "price": ["euro", "dollars"], "capacity": ["size", "litres", "space"]},
+    "comparison" : {"less": ["<", "smaller", "cheaper", "lower", "dimmer", "not more", "under"], 
+                    "more": [ "bigger", "brighter", "higher", ">", "over"]},
     "cheap" : ["cheap", "cheapest", "not expensive"],
     "socket" : ["e4", "e6", "e7", "e22", "e45", "e13", "e21", "e3", "e2", "e1", "e5", "gu10", "e27", "e14"],
     "productID" : ["ID112","ID113","ID114","ID115","ID116","ID117","ID118","ID119","ID120","ID121","ID122","ID123",
