@@ -16,8 +16,10 @@ var workspace_id = config.watson.workspace_id; // replace with workspace ID
 
 
 module.exports = function(newMessageFromUser,done) {
-     service.message({
+    newMessageFromUser = newMessageFromUser.replace("\n","|n")
+    service.message({
         workspace_id: workspace_id,
         input: { text: newMessageFromUser }
         }, done)
+
  };

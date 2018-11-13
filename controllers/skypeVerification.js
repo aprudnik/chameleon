@@ -17,7 +17,7 @@ userState = new UserState(memoryStorage);
 
 async function getReply(text, userID, callback) {
     await getIntents(config.active, text, async function (err, body){
-        await dialog(body, userID, async function(resMessage) {
+        await dialog(body, userID, text, async function(resMessage) {
             callback(resMessage)
         })
     })

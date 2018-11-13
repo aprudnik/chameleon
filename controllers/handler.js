@@ -25,12 +25,20 @@ async function getCompare(mainList,varList){
     return 'None'
 }
 
+async function randomResponse(dialogSet){
+    if (Array.isArray(dialogSet.response)){
+        return dialogSet.response[dialogSet.response.length * Math.random() | 0]
+    }
+    else return dialogSet.response
+}
+
 async function jsonToTemplate (jsonObject) {
     var returnString = ""
     Object.keys(jsonObject).forEach(element => {
-        if (element != "top") {returnString += `${element} : ${jsonObject[element]} `}
+        if (element == "ProductID") {returnString += `${element}: ${jsonObject[element]} `}
+        else if (element != "top") {returnString += `\n\t${element}: ${jsonObject[element]} `}
     })
-    returnString += ", "
+    returnString += "\n"
     return returnString
 }
 
@@ -62,6 +70,16 @@ async function replaceValues(string,object){
     return newString
 }
 
+async function removeRepeat(text){
+    var reg =/-\d$/gm;
+    var found = text.match(reg);
+    if (found==null) return text
+    else {
+        returnText = text.replace(found, "")
+        return returnText
+    }
+}
+
 async function combineAllMissingEntities (requestedList,Missing){
     resultString = ""
     for (const value of Missing){
@@ -71,12 +89,18 @@ async function combineAllMissingEntities (requestedList,Missing){
 }
 
 
+Handler.confirmation = async function (dialogSet, intent, entities, response) {
+    var filledOrder = await fillOrder(entities)
+    var responseString = await replaceValues(dialogSet.confirmationMessage,filledOrder)
+    return responseString
+}
+
 Handler.order = async function (dialogSet, intent, entities, response) {
     var filledOrder = await fillOrder(entities)
     var notMissing = await validateOrder(dialogSet.reqEntityRequest,filledOrder)
     if (notMissing == true) {
         // entities = []
-        var responseString = await replaceValues(dialogSet.completionConfirmation,filledOrder)
+        var responseString = await replaceValues(await randomResponse(dialogSet),filledOrder)
         return responseString
     }
     else {
@@ -88,16 +112,10 @@ Handler.order = async function (dialogSet, intent, entities, response) {
 Handler.search = async function (dialogSet, intent, entities, response) {
     if (Object.keys(entities).length == 0) {return dialogSet.failResponse}
     var results = []
-    var returnString = dialogSet.response
+    var returnString = await randomResponse(dialogSet)
     var jsonArray = await loadData()
     results = jsonArray
     var removedEntities = {}
-    var compareMetricList = ["comparison"] //["less","more"]
-    //var searchSymb = await getCompare(Object.keys(entities),compareMetricList)
-    // for (const value of dialogSet.searchFieldExceptions){
-    //     removedEntities[value] = entities[value]
-    //     delete entities[value]
-    // }
     for (const value of dialogSet.searchFieldExceptions){
         for (const key of Object.keys(entities)){
             if (key.indexOf(value)>-1){
@@ -111,10 +129,9 @@ Handler.search = async function (dialogSet, intent, entities, response) {
             newKey = entity.split("metrics")
             searchField = entities[entity]
             searchValue = removedEntities['sys-number'+newKey[1]]
-            // curSymb = searchSymb
             curSymb = removedEntities[`comparison`+newKey[1]]
         } else {
-            searchField = entity
+            searchField = await removeRepeat(entity)
             searchValue = entities[entity]
             curSymb = 'None'
         }
@@ -130,7 +147,7 @@ Handler.search = async function (dialogSet, intent, entities, response) {
 }
 
 Handler.response = async function (dialogSet, intent, entities, response){
-    text = dialogSet.response
+    text = await randomResponse(dialogSet)
     for (const entity of Object.keys(entities)){
         text = text.replace(`{${entity}}`,`${entities[entity]}`)
     }

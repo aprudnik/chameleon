@@ -1,8 +1,7 @@
-ProductID,price,name,item,category,top,capacity,volume
-ke0001,264.30,Bugatti Vera 14-VERAN Black,kettle,appliances,true,1.7
-ke0002,91.90,Electrolux EEWA7810,kettle,appliances,false,2.7
-
-
-
-
-
+ProductID,price,name,item,category,top,capacity,power
+ke0001,"264,30",Bugatti Vera 14-VERAN Black,kettle,appliances,TRUE,1.7,2400
+ke0002,"91,90",Electrolux EEWA7810,kettle,appliances,FALSE,2.7,2400
+ke0003,"80,20",Morphy Richards Special Edition Accents Sand Traditional Kettle 102101,kettle,appliances,FALSE,1.5,3000
+ke0004,"75,99",ProfiCook PC-TKS 1056,kettle,appliances,FALSE,1.7,2250
+ke0005,"205,30",Bugatti Vera Easy 14-SVERAC1 White,kettle,appliances,FALSE,1.7,2180
+ke0006,"16,10",Prime3 SEK51 Red,kettle,appliances,FALSE,1.5,2200

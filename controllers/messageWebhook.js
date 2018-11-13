@@ -9,7 +9,7 @@ module.exports = (req, res) => {
             entry.messaging.forEach(event => {
                 if (event.message && event.message.text) {
                     getIntents(config.active, event.message.text, function (err, body){
-                        dialog(body, event.sender.id, resMessage => {
+                        dialog(body, event.sender.id, event.message.text, resMessage => {
                             processFacebookMessage(event.sender.id,resMessage)
                         })
                     })

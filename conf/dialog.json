@@ -2,17 +2,19 @@
     "requiredEntities"	: [],
     "optionalEntitities" : ["socket"],
     "reqEntityRequest": {},
+    "entitiesToSave" : ["item"],
     "completionAction": "search",
     "searchFieldExceptions" : ["sys-number","comparison"],
-    "response" : "Items that I have found : \n",
+    "response" : ["Items that I have found : \n", "Ok, here's what I found: \n"],
     "failResponse" : "Sorry we dont have such Item. Maybe you need something else? \n"
     },
 "Greeting" : {
-    "requiredEntities"	: ["name"],
+    "requiredEntities"	: [],
     "optionalEntitities" : [],
-    "reqEntityRequest": {"name": "Hello, what is your name?"},
+    "reqEntityRequest": {"sys-person": "Hello, what is your name?"},
+    "entitiesToSave" : [],
     "completionAction": "response",
-    "response" : "{name}, Welcome to our store!"
+    "response" : ["Hello, Welcome to our store!", "Hello, how can I help you?"]
     },
 "Identity" : {
     "requiredEntities"	: [],
@@ -22,13 +24,18 @@
     "response" : "I am a virtual assistant. I’m here to help you. What would you like to buy?"
     },
 "Order" : {
-    "requiredEntities"	: ["name", "productID"],
+    "requiredEntities"	: ["name", "productID", "address"],
     "optionalEntitities" : [],
     "reqEntityRequest": {
-        "name": "Could you please provide your name for the order?",
-        "productID" : "Could you please provide product ID you want to order?"    
+        "name": "Could you please provide your name as: \n Name: Name Surname",
+        "productID" : "Could you please provide product ID you want to order?",
+        "address" : "Could you please provide your adress as: \n Address: your address"
         },
-    "completionConfirmation" : "Your order is {productID} delivered to {name}, is this correct?",
+    "entitiesToFind": {"name": "Name:", "address": "Address: "},
+    "confirmation" : "true",
+    "confirmationMessage" : "Your order is {productID} delivered to {name} at {address}, is this correct?",
+    "response" : "Delivery of {productID} to {address} for {name} registered",
+    "failResponse" : "Is there something incorrect?",
     "completionAction": "order"
     },
 "topOffers" : {

@@ -4,6 +4,11 @@ const getLuisIntent = require('../nl-assistant/luis')
 const getWatsonIntent = require('../nl-assistant/watson')
 const getAwsIntent = require('../nl-assistant/awsLex')
 var Promise = require('promise');
+const fs = require('fs');
+
+let rawdata = fs.readFileSync('./conf/dialog.json');  
+let dialogSet = JSON.parse(rawdata); 
+
 
 var responseList = {}
 var entities = {}
@@ -12,15 +17,22 @@ var intentList = []
 var entities = {}
 
 
+nlpAllignment = {"builtin.number" :"sys-number",
+                "builtin.personName" :"sys-person" }
+
+const allignmentCheck = (entity) => {if (nlpAllignment[entity] == null) return entity; 
+                                    else return nlpAllignment[entity]}
+
 const count = (list, searchTerm) => list.filter((x) => x === searchTerm).length
 
+
 const done = (err, body, result) =>{
-    
     if (typeof body === "string") {
         body = JSON.parse(body)
     }
     //Watson json parse
     if (body.intents){
+        inputString = body.input.text
         if (Object.keys(body.intents).length>0){
             intentList.push(body.intents[0].intent);
         } else {
@@ -43,6 +55,7 @@ const done = (err, body, result) =>{
 
     //LUIS json parse
     if (body.topScoringIntent){
+        inputString = body.query
         if (body.topScoringIntent.score > 0.8){
             intentList.push(body.topScoringIntent.intent);
         }
@@ -56,14 +69,10 @@ const done = (err, body, result) =>{
                 if (entity.resolution.values) {
                     entities[entity.type+addedKey] = entity.resolution.values[0];
                 } else {
-                    if (entity.type == "builtin.number") {
-                        entities["sys-number"+addedKey] = entity.resolution.value
-                    } else {
-                        entities[entity.type+addedKey] = entity.resolution.value
-                    }
+                    entities[allignmentCheck(entity.type)+addedKey] = entity.resolution.value
                 }
             } else {
-                entities[entity.type+addedKey] = entity.entity
+                entities[allignmentCheck(entity.type)+addedKey] = entity.entity
             }
             duplicates.push(entity.type)
             entitiesList.push(entities);
@@ -120,7 +129,7 @@ async function run() {
     if (config.active.indexOf("aws") > -1) await promiseWrap(getAwsIntent, "aws")
     intentList = []
     entities = {}
-    response(null,responseList)
+    response(null, responseList)
 }
 run ()
 }

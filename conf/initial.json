@@ -13,17 +13,21 @@
     {"Name" : "topOffers", "Examples": ["best offers", "top offers", "best deals", "top deals"]}
 ], 
 "Entities": {
-    "category" : {"electronics": [], "computer": [], "kitchen": [], "appliances": []},
+    "boolean" : {"true": ["true", "yes", "correct", "ok", "okay", "yep"], "false": ["false", "no", "nope", "wrong"]},
+    "category" : {"electronics": [], "computer": [], "appliances": ["appliances", "kitchen appliances"]},
     "item" : { "lamp": ["lamps", "bulbs", "bulb"], "HDD": ["HDDs", "hard drive", "hard drives"], "kettle": ["kettles"]},
-    "metrics" : {"lumen": ["lumens"], "price": ["euro", "dollars"], "capacity": ["size", "litres", "space"]},
+    "metrics" : {"lumen": ["lumens", "lm"], 
+                "price": ["euro", "dollars", "$"], 
+                "capacity": ["size", "litres", "space", "l"], 
+                "power" : ["wt", "watts", "watt"]
+            },
     "comparison" : {"less": ["<", "smaller", "cheaper", "lower", "dimmer", "not more", "under"], 
                     "more": [ "bigger", "brighter", "higher", ">", "over"]},
     "cheap" : ["cheap", "cheapest", "not expensive"],
     "socket" : ["e4", "e6", "e7", "e22", "e45", "e13", "e21", "e3", "e2", "e1", "e5", "gu10", "e27", "e14"],
     "productID" : ["ID112","ID113","ID114","ID115","ID116","ID117","ID118","ID119","ID120","ID121","ID122","ID123",
          "hd0001", "hd0002", "hd0003",
-         "ke0001", "ke0002", "ke0003",
+         "ke0001", "ke0002", "ke0003", "ke0004", "ke0005", "ke0006",
          "el0001", "el0002", "el0003","el0004", "el0005", "el0006","el0007", "el0008", "el0009","el0010", "el0011", "el0012"
-    ],
-    "name" : ["Alex", "Aleksandrs", "Ruslans", "Romans", "Viktorija", "Anna"]
+    ]
 }}
