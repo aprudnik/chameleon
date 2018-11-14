@@ -3,7 +3,6 @@
     "reqEntityRequest": {},
     "entitiesToSave" : ["item"],
     "completionAction": "search",
-    "searchFieldExceptions" : ["sys-number","comparison"],
     "searchFields" : ["item", "metrics", "socket", "category"], 
     "response" : ["Items that I have found : \n", "Ok, here's what I found: \n"],
     "failResponse" : "Sorry we dont have such Item. Maybe you need something else? \n"
