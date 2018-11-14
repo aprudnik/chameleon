@@ -5,8 +5,8 @@ const dialog = require('./dialog')
 const { BotFrameworkAdapter, MemoryStorage, ConversationState, UserState } = require('botbuilder');
 const skypeBot = require(`./skypeBot`)
 const adapter = new BotFrameworkAdapter({
-    appId: "786c5027-169e-4958-895a-a692f47f28b0",
-    appPassword: "xtgatSSSRUR8593?;inG1}*"
+    appId: config.mbf.appId,
+    appPassword: config.mbf.appPassword
  });
  
 

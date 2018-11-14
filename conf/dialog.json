@@ -1,16 +1,15 @@
 {"Show" : {
     "requiredEntities"	: [],
-    "optionalEntitities" : ["socket"],
     "reqEntityRequest": {},
     "entitiesToSave" : ["item"],
     "completionAction": "search",
     "searchFieldExceptions" : ["sys-number","comparison"],
+    "searchFields" : ["item", "metrics", "socket", "category"], 
     "response" : ["Items that I have found : \n", "Ok, here's what I found: \n"],
     "failResponse" : "Sorry we dont have such Item. Maybe you need something else? \n"
     },
 "Greeting" : {
     "requiredEntities"	: [],
-    "optionalEntitities" : [],
     "reqEntityRequest": {"sys-person": "Hello, what is your name?"},
     "entitiesToSave" : [],
     "completionAction": "response",
@@ -18,14 +17,12 @@
     },
 "Identity" : {
     "requiredEntities"	: [],
-    "optionalEntitities" : [],
     "reqEntityRequest": {},
     "completionAction": "response",
     "response" : "I am a virtual assistant. I’m here to help you. What would you like to buy?"
     },
 "Order" : {
     "requiredEntities"	: ["name", "productID", "address"],
-    "optionalEntitities" : [],
     "reqEntityRequest": {
         "name": "Could you please provide your name as: \n Name: Name Surname",
         "productID" : "Could you please provide product ID you want to order?",
@@ -40,10 +37,13 @@
     },
 "topOffers" : {
     "requiredEntities"	: [],
-    "optionalEntitities" : [],
     "reqEntityRequest": {},
     "completionAction": "topOffers",
     "response" : "Best offers are : \n",
     "failResponse" : "Sorry we dont have best offers for you? \n"
+    },
+"cancel" : {
+    "completionAction": "response",
+    "response" : "Current operation was canceled"
     }
 }

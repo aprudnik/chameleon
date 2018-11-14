@@ -14,6 +14,7 @@ config.watson = {}
 config.aws = {}
 config.discord = {}
 config.luis = {}
+config.mbf = {}
 
 config.watson.workspace_id = 'ff9fa0f0-beb9-4008-b009-f1cc6af5fe51'
 config.watson.username = '095c9c0f-24fb-4269-bb43-7038377b6a98'
@@ -33,6 +34,9 @@ config.aws.region = 'eu-west-1'
 config.aws.identityPool = 'eu-west-1:12c5e820-9708-478b-90c6-111ffbffee99'
 config.aws.botName = 'Team_bot'
 config.aws.botAlias = 'Team_B'
+
+config.mbf.appId = "786c5027-169e-4958-895a-a692f47f28b0"
+config.mbf.appPassword = "xtgatSSSRUR8593?;inG1}*"
 
 module.exports = config;
 module.exports.setActiveBot = (bot) => setActiveBot(bot);

@@ -115,7 +115,7 @@ async function runLoop(callback) {
             })
         })
         callback(jsonToSend)
-    }, Object.keys(initial["Entities"])*500)  
+    }, Object.keys(initial["Entities"]).length*600)  
 }
 
 function waitPublish(){
@@ -134,7 +134,7 @@ function waitPublish(){
 
 async function trainLuis(callback) {
     await runLoop(function(toSend){
-        //console.log(toSend)
+        //console.log(JSON.stringify(toSend))
         setTimeout(function(){
             url_to_send = url + `examples` + `?subscription-key=e17b1f8d66d3410abadc94ac2ceb1ce9`
             

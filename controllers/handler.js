@@ -95,6 +95,7 @@ Handler.confirmation = async function (dialogSet, intent, entities, response) {
     return responseString
 }
 
+
 Handler.order = async function (dialogSet, intent, entities, response) {
     var filledOrder = await fillOrder(entities)
     var notMissing = await validateOrder(dialogSet.reqEntityRequest,filledOrder)
@@ -116,14 +117,22 @@ Handler.search = async function (dialogSet, intent, entities, response) {
     var jsonArray = await loadData()
     results = jsonArray
     var removedEntities = {}
-    for (const value of dialogSet.searchFieldExceptions){
-        for (const key of Object.keys(entities)){
-            if (key.indexOf(value)>-1){
-                removedEntities[key] = entities[key]
-                delete entities[key]
-            }
+    // for (const value of dialogSet.searchFieldExceptions){
+    //     for (const key of Object.keys(entities)){
+    //         if (key.indexOf(value)>-1){
+    //             removedEntities[key] = entities[key]
+    //             delete entities[key]
+    //         }
+    //     }
+    // }
+
+    for (const key of Object.keys(entities)){
+        if ( dialogSet.searchFields.indexOf(key)==-1){
+            removedEntities[key] = entities[key]
+            delete entities[key]
         }
     }
+
     for (const entity of Object.keys(entities)) {
         if (entity.indexOf("metrics")>-1) {
             newKey = entity.split("metrics")
