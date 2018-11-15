@@ -10,15 +10,17 @@
 "Greeting" : {
     "requiredEntities"	: [],
     "reqEntityRequest": {"sys-person": "Hello, what is your name?"},
-    "entitiesToSave" : [],
+    "defaultForOptional" : {"sys-person": "Customer"},
+    "entitiesToSave" : ["sys-person"],
     "completionAction": "response",
-    "response" : ["Hello, Welcome to our store!", "Hello, how can I help you?"]
+    "response" : ["Hello {sys-person}, Welcome to our store!", "Hello {sys-person}, how can I help you?"]
     },
 "Identity" : {
     "requiredEntities"	: [],
     "reqEntityRequest": {},
+    "defaultForOptional" : {"sys-person": ""},
     "completionAction": "response",
-    "response" : "I am a virtual assistant. I’m here to help you. What would you like to buy?"
+    "response" : "{sys-person} I am a virtual assistant. I’m here to help you. What would you like to buy?"
     },
 "Order" : {
     "requiredEntities"	: ["name", "productID", "address"],

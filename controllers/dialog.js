@@ -1,10 +1,17 @@
 const fs = require('fs');
 
-let rawdata = fs.readFileSync("./conf/dialog.json");  
-let dialogSet = JSON.parse(rawdata); 
+var rawdata = fs.readFileSync("./conf/dialog.json");  
+var dialogSet = JSON.parse(rawdata); 
 
 var Handler = require("./handler")
 
+fs.watchFile("./conf/dialog.json",function (curr, prev){
+    if (curr.mtime != prev.mtime){
+        console.log("change")
+        rawdata = fs.readFileSync("./conf/dialog.json");  
+        dialogSet = JSON.parse(rawdata);    
+    }
+})
 
 entities= {}
 intent = {}
@@ -43,7 +50,7 @@ async function dialog(response, userID, text, returnResponse) {
     if (entities[userID] == null){
         entities[userID] = Object.assign(response.entities)
     } else {
-        entities[userID] = Object.assign(entities[userID],response.entities)
+        entities[userID] = Object.assign(savedEntities[userID],entities[userID],response.entities)
     }
 
     if (savedEntities[userID] == null){savedEntities[userID]={}}
@@ -58,7 +65,6 @@ async function dialog(response, userID, text, returnResponse) {
     }
     else{
         if (Object.keys(dialogSet).indexOf(intent[userID]) > -1) {
-            //console.log("staticEntities[userID]", staticEntities[userID])
             dialogSet[intent[userID]]["requiredEntities"].forEach(reqEntity => {
                 if (Object.keys(entities[userID]).indexOf(reqEntity) == -1 &&
                     Object.keys(savedEntities[userID]).indexOf(reqEntity) == -1 &&

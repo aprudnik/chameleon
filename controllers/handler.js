@@ -17,6 +17,8 @@ Handler = {}
 
 Handler.entities = []
 
+const capitalized = ["sys-person"]
+
 async function getCompare(mainList,varList){
     for (const el of mainList){
         var index = varList.indexOf(el)
@@ -60,12 +62,31 @@ async function fillOrder(entities){
     return OrderTemplate
 }
 
-async function replaceValues(string,object){
+function capitalizeFirstLetter(entityName, string) {
+    if (capitalized.indexOf(entityName)>-1){
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    else {
+        return string
+    }
+}
+
+async function replaceValues(string,object,dialogSet){
     var reg = /(?<=\{).+?(?=\})/gm;
     var found = string.match(reg)
     newString = string
     for (const value of found){
-        var newString = newString.replace(`{${value}}`,object[value])
+        if (object[value]){
+            var replacement = capitalizeFirstLetter(value, object[value])
+        }
+        else if (dialogSet.defaultForOptional){
+            var replacement = dialogSet.defaultForOptional[value] || ""
+        }
+        else {
+            var replacement = ""
+        }
+
+        var newString = newString.replace(`{${value}}`,replacement)
     }
     return newString
 }
@@ -91,7 +112,7 @@ async function combineAllMissingEntities (requestedList,Missing){
 
 Handler.confirmation = async function (dialogSet, intent, entities, response) {
     var filledOrder = await fillOrder(entities)
-    var responseString = await replaceValues(dialogSet.confirmationMessage,filledOrder)
+    var responseString = await replaceValues(dialogSet.confirmationMessage,filledOrder, dialogSet)
     return responseString
 }
 
@@ -101,7 +122,7 @@ Handler.order = async function (dialogSet, intent, entities, response) {
     var notMissing = await validateOrder(dialogSet.reqEntityRequest,filledOrder)
     if (notMissing == true) {
         // entities = []
-        var responseString = await replaceValues(await randomResponse(dialogSet),filledOrder)
+        var responseString = await replaceValues(await randomResponse(dialogSet),filledOrder, dialogSet)
         return responseString
     }
     else {
@@ -148,9 +169,10 @@ Handler.search = async function (dialogSet, intent, entities, response) {
 
 Handler.response = async function (dialogSet, intent, entities, response){
     text = await randomResponse(dialogSet)
-    for (const entity of Object.keys(entities)){
-        text = text.replace(`{${entity}}`,`${entities[entity]}`)
-    }
+    // for (const entity of Object.keys(entities)){
+    //     text = text.replace(`{${entity}}`,`${entities[entity]}`)
+    // }
+    text = await replaceValues(text,entities, dialogSet)
     return text
 }
 

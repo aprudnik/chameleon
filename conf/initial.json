@@ -1,5 +1,6 @@
 {"Intents" : [
-    {"Name" : "Greeting", "Examples": ["hi", "hello","good morning","welcome", "hi, i am name"]},
+    {"Name" : "Greeting", "Examples": ["hi", "hello","good morning","welcome", "hi, i am name", "My name is", "I'm called",
+                                        "You can call me"]},
     {"Name" : "Order", "Examples": ["I want to order", "order", "order me", "I would like to order"]},
     {"Name" : "Identity", "Examples": ["who are you", "what can you do"]},
     {"Name" : "Show", "Examples": ["can you show me all {category}", 
@@ -10,7 +11,8 @@
                                     "give me all {item}",
                                     "give me all {category}"]},
     {"Name" : "topOffers", "Examples": ["best offers", "top offers", "best deals", "top deals"]},
-    {"Name" : "cancel", "Examples": ["stop", "cancel", "abort", "exit"]}
+    {"Name" : "cancel", "Examples": ["stop", "cancel", "abort", "exit"]},
+    {"Name" : "reload", "Examples": ["reload Dialog"]}
 ], 
 "Entities": {
     "boolean" : {"true": ["true", "yes", "correct", "ok", "okay", "yep"], "false": ["false", "no", "nope", "wrong"]},
