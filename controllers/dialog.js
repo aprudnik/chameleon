@@ -50,7 +50,7 @@ async function dialog(response, userID, text, returnResponse) {
     if (entities[userID] == null){
         entities[userID] = Object.assign(response.entities)
     } else {
-        entities[userID] = Object.assign(savedEntities[userID],entities[userID],response.entities)
+        entities[userID] = Object.assign(entities[userID],response.entities)
     }
 
     if (savedEntities[userID] == null){savedEntities[userID]={}}
@@ -77,19 +77,20 @@ async function dialog(response, userID, text, returnResponse) {
                 setCurrentIntent(intent[userID], userID)
                 returnResponse(dialogSet[intent[userID]]["reqEntityRequest"][missingEntity])
             })
-            if (foundEntities[userID].length == dialogSet[intent[userID]]["requiredEntities"].length){
+            //if (foundEntities[userID].length == dialogSet[intent[userID]]["requiredEntities"].length){
+            if (askFor[userID].length==0){    
                 if (dialogSet[intent[userID]]["entitiesToSave"]){
                     dialogSet[intent[userID]]["entitiesToSave"].forEach(sEntity =>{
+                        console.log("sEntity", sEntity)
                         savedEntities[userID][sEntity] = entities[userID][sEntity] || savedEntities[userID][sEntity]
                     })
                 }
                 foundEntities[userID].forEach(entity =>{
-                    if (Object.keys(entities[userID]).indexOf(entity) == -1 ||
-                        Object.keys(staticEntities[userID]).indexOf(entity) > -1){
+                    if (Object.keys(entities[userID]).indexOf(entity) == -1){
                         entities[userID][entity] = savedEntities[userID][entity] || staticEntities[userID][entity]
                     }
                 })
-                console.log(entities[userID], savedEntities[userID])
+                console.log("ent:",entities[userID], "savedEnt",savedEntities[userID])
                 if (dialogSet[intent[userID]]["confirmation"]=="true"){
                     if (entities[userID]["boolean"]=="true"){
                         await returnResponse (await Handler[dialogSet[intent[userID]].completionAction](dialogSet[intent[userID]], intent[userID], entities[userID], response))

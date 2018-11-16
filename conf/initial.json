@@ -24,7 +24,7 @@
                 "power" : ["wt", "watts", "watt"]
             },
     "comparison" : {"less": ["<", "smaller", "cheaper", "lower", "dimmer", "not more", "under"], 
-                    "more": [ "bigger", "brighter", "higher", ">", "over"]},
+                    "more": [ "bigger", "brighter", "higher", ">", "over", "larger"]},
     "cheap" : ["cheap", "cheapest", "not expensive"],
     "socket" : ["e4", "e6", "e7", "e22", "e45", "e13", "e21", "e3", "e2", "e1", "e5", "gu10", "e27", "e14"],
     "productID" : ["ID112","ID113","ID114","ID115","ID116","ID117","ID118","ID119","ID120","ID121","ID122","ID123",

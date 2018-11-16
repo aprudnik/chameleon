@@ -1,15 +1,40 @@
 const csv=require('csvtojson')
+const request = require('request');
 const lampCsvFilePath='./knowledgeDB/lamp.csv'
 const kettleCsvFilePath='./knowledgeDB/kettle.csv'
 const hddCsvFilePath='./knowledgeDB/hdd.csv'
+const dbDir = './knowledgeDB/'
+const fs = require('fs');
 
-async function loadData () {
-    var lampArray = await csv().fromFile(lampCsvFilePath)
-    var kettleArray = await csv().fromFile(kettleCsvFilePath)
-    var hddArray = await csv().fromFile(hddCsvFilePath)
 
-    return lampArray.concat(kettleArray,hddArray)
+// async function loadData () {
+    
+//     //var lampArray = await csv().fromFile(dbDir)
+//     // var kettleArray = await csv().fromFile(kettleCsvFilePath)
+//     // var hddArray = await csv().fromFile(hddCsvFilePath)
+//     //return lampArray
+
+//     await getCsvPath(async function (json){
+//         //console.log(json)
+//     })
+// }
+
+async function loadData(){
+    curr = {}
+    for (fileName of fs.readdirSync(dbDir)) {
+        curr[fileName.replace(".csv", "")] = await csv().fromFile(dbDir+fileName)
+        }
+    // for (key,index of Object.keys(curr)){
+    //     if (curr["full"]) {console.log("concat", key);curr["full"].concat(curr[key])}
+    //     else {curr["full"] = curr[key]}
+    //     if (Object.keys(curr) == index+1){
+    //         curr["done"]=curr["full"]
+    //     }
+    // }
+    // console.log(curr["done"])
+    return curr
 }
+
 
 OrderTemplate = {}
 
@@ -136,15 +161,14 @@ Handler.search = async function (dialogSet, intent, entities, response) {
     var results = []
     var returnString = await randomResponse(dialogSet)
     var jsonArray = await loadData()
-    results = jsonArray
+    results = jsonArray[entities["item"]]
     var removedEntities = {}
     for (const key of Object.keys(entities)){
-        if ( dialogSet.searchFields.indexOf(key)==-1){
+        if ( dialogSet.searchFields.indexOf(key.split("-")[0])==-1){
             removedEntities[key] = entities[key]
             delete entities[key]
         }
     }
-
     for (const entity of Object.keys(entities)) {
         if (entity.indexOf("metrics")>-1) {
             newKey = entity.split("metrics")
@@ -163,7 +187,13 @@ Handler.search = async function (dialogSet, intent, entities, response) {
         returnString += await jsonToTemplate(value)
         returnString += "\n"
     }
+    //console.log("results: ", results)
     if (results.length == 0) { return dialogSet.failResponse}
+    for (const key of Object.keys(entities)){
+        if ( dialogSet.entitiesToSave.indexOf(key.split("-")[0])==-1){
+            delete entities[key]
+        }
+    }
     return returnString
 }
 
@@ -194,14 +224,13 @@ async function getDataFromDB(db,fieldName,fieldValue,compare){
     // Should be DB query generation CSV read for POC
     var resultList = []
     async function find() {
-        
         db.forEach((object) => {
             switch(compare) {
                 case "less" : 
-                    if (Number(object[fieldName]) < Number(fieldValue)){ resultList.push(object) };
+                    if (Number(object[fieldName]) <= Number(fieldValue)){ resultList.push(object) };
                     break;
                 case "more" :
-                    if (Number(object[fieldName]) > Number(fieldValue)){ resultList.push(object) };
+                    if (Number(object[fieldName]) >= Number(fieldValue)){ resultList.push(object) };
                     break;
                 default:
                     if (fieldValue.toLowerCase().indexOf(object[fieldName].toLowerCase()) > -1){resultList.push(object)};
