@@ -2,8 +2,10 @@ var config = require('../conf/config')
 const getIntents = require('./pathSelection')
 const dialog = require('./dialog')
 
-const { BotFrameworkAdapter, MemoryStorage, ConversationState, UserState } = require('botbuilder');
 const skypeBot = require(`./skypeBot`)
+const { BotFrameworkAdapter, MemoryStorage, ConversationState, UserState } = require('botbuilder');
+
+
 const adapter = new BotFrameworkAdapter({
     appId: config.mbf.appId,
     appPassword: config.mbf.appPassword

@@ -5,12 +5,13 @@ var config = require('./conf/config')
 
 const app = express();
 
-
+//port to start the process on, default: 8080
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
-const verificationControllerFacebook = require('./controllers/verification');
+
+const verificationControllerFacebook = require('./controllers/facebookVerification');
 const verificationControllerSlack = require('./controllers/slackVerification');
-const verificationControllerSkype = require('./controllers/skypeVerification');
-const messageWebhookController = require('./controllers/messageWebhook');
+const verificationControllerSkype = require('./controllers/skypeMessage');
+const messageWebhookController = require('./controllers/facebookMessage');
 const discordBot = require('./controllers/discord')
 const getIntents = require('./controllers/pathSelection')
 const awsLex = require('./nl-assistant/awsLex')
@@ -25,9 +26,9 @@ app.get('/text', (req, res) =>
          res.send(body)}
     )) 
 app.get('/verify', verificationControllerFacebook);
+app.post('/verify', messageWebhookController);
 app.post('/slack', verificationControllerSlack);
 app.post('/skype', verificationControllerSkype);
-app.post('/verify', messageWebhookController);
 app.get('/changeBot/:bot', (req,res) => {
     const params = req.params
     config.setActiveBot(params.bot);

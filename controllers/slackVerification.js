@@ -1,4 +1,5 @@
-const slackMessage = require('../helpers/slackMessage');
+//Parses Slack request and either verifies webhook or sends it to slackMessage
+const slackMessage = require('./slackMessage');
 
 module.exports = (req, res) => {
  const slackChallenge = req.body['challenge'];

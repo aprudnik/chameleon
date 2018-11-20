@@ -1,9 +1,11 @@
+//Responds to Discord messages
 const Discord = require("discord.js");
 var config = require('../conf/config')
 const getIntents = require('./pathSelection')
 const dialog = require('./dialog')
 
 const client = new Discord.Client();
+
 
 client.login(config.discord.token);
     

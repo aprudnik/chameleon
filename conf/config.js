@@ -15,6 +15,11 @@ config.aws = {}
 config.discord = {}
 config.luis = {}
 config.mbf = {}
+config.facebook = {}
+
+config.facebook.verifyToken = 'chameleon'
+config.facebook.accessToken ='EAAeoT1yyLaUBAKZCZBcdGZCSsW38Oi3GkOoilMNwHLXdfhb3sncUgodgiHqZA4XTNUwruoScjssaLDq2DRt2ZCriHe7xUhlZBzmyKZCpMfxffZBh3EupSHWo4nSNoZAaLG4VAyiTjAx4S4B70UuP5fgBCiVRJyUn55uQiz32mAzBFPUe5TIZAzZCVW8';
+
 
 config.watson.workspace_id = 'ff9fa0f0-beb9-4008-b009-f1cc6af5fe51'
 config.watson.username = '095c9c0f-24fb-4269-bb43-7038377b6a98'

@@ -2,7 +2,6 @@ const { ActivityTypes } = require('botbuilder');
 const { DialogSet } = require('botbuilder-dialogs');
 
 
-var replyText = ""
 
 // State Accessor Properties
 const DIALOG_STATE_PROPERTY = 'dialogState';
