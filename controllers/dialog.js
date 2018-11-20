@@ -86,7 +86,8 @@ async function dialog(response, userID, text, returnResponse) {
                     })
                 }
                 foundEntities[userID].forEach(entity =>{
-                    if (Object.keys(entities[userID]).indexOf(entity) == -1){
+                    if (Object.keys(entities[userID]).indexOf(entity) == -1 ||
+                        Object.keys(staticEntities[userID]).indexOf(entity) > -1){
                         entities[userID][entity] = savedEntities[userID][entity] || staticEntities[userID][entity]
                     }
                 })

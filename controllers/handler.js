@@ -20,19 +20,16 @@ const fs = require('fs');
 // }
 
 async function loadData(){
-    curr = {}
+    curr = []
     for (fileName of fs.readdirSync(dbDir)) {
-        curr[fileName.replace(".csv", "")] = await csv().fromFile(dbDir+fileName)
+        curr.push(await csv().fromFile(dbDir+fileName))
+
+        if (fs.readdirSync(dbDir).length == Object.keys(curr).length){
+            var merged = [].concat(...curr)
+            return merged
         }
-    // for (key,index of Object.keys(curr)){
-    //     if (curr["full"]) {console.log("concat", key);curr["full"].concat(curr[key])}
-    //     else {curr["full"] = curr[key]}
-    //     if (Object.keys(curr) == index+1){
-    //         curr["done"]=curr["full"]
-    //     }
-    // }
-    // console.log(curr["done"])
-    return curr
+    }
+    //return curr
 }
 
 
@@ -161,7 +158,7 @@ Handler.search = async function (dialogSet, intent, entities, response) {
     var results = []
     var returnString = await randomResponse(dialogSet)
     var jsonArray = await loadData()
-    results = jsonArray[entities["item"]]
+    results = jsonArray
     var removedEntities = {}
     for (const key of Object.keys(entities)){
         if ( dialogSet.searchFields.indexOf(key.split("-")[0])==-1){

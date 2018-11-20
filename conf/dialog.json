@@ -9,7 +9,7 @@
     },
 "Greeting" : {
     "requiredEntities"	: [],
-    "reqEntityRequest": {"sys-person": "Hello, what is your name?"},
+    "reqEntityRequest": {},
     "defaultForOptional" : {"sys-person": "Customer"},
     "entitiesToSave" : ["sys-person"],
     "completionAction": "response",
