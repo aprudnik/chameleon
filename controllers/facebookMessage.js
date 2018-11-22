@@ -1,5 +1,5 @@
 //Sends a facebook message
-const getIntents = require('./pathSelection')
+const getIntents = require('./getIntents')
 const dialog = require('./dialog')
 var config = require('../conf/config')
 const request = require('request');
@@ -28,6 +28,7 @@ async function getReply(text, userID, callback) {
 
 
 module.exports = (req, res) => {
+    //checks if the received request is a message to our Facebook page and then reply
     if (req.body.object === 'page') {
         req.body.entry.forEach(entry => {
             entry.messaging.forEach(event => {

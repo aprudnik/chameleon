@@ -1,7 +1,7 @@
 //Send response to Slack
 const request = require('request');
 var config = require('../conf/config')
-const getIntents = require('./pathSelection')
+const getIntents = require('./getIntents')
 const dialog = require('./dialog')
 
 const sendTextMessage = (channel, user, text) => {

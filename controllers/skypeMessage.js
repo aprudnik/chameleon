@@ -1,5 +1,5 @@
 var config = require('../conf/config')
-const getIntents = require('./pathSelection')
+const getIntents = require('./getIntents')
 const dialog = require('./dialog')
 
 const skypeBot = require(`./skypeBot`)

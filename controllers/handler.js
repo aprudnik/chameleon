@@ -177,8 +177,10 @@ Handler.search = async function (dialogSet, intent, entities, response) {
             searchValue = entities[entity]
             curSymb = 'None'
         }
-        console.log(searchField,searchValue,curSymb)
-        results = await getDataFromDB(results,searchField,searchValue,curSymb)
+        if (searchValue){
+            console.log(searchField,searchValue,curSymb)
+            results = await getDataFromDB(results,searchField,searchValue,curSymb)
+        }
     }
     for (const value of results){
         returnString += await jsonToTemplate(value)

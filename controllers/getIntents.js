@@ -21,7 +21,7 @@ const allignmentCheck = (entity) => {if (nlpAllignment[entity] == null) return e
 const count = (list, searchTerm) => list.filter((x) => x === searchTerm).length
 
 //Combines intents and entities from back-end responses
-const done = (err, body, result) =>{
+const parse = (err, body, result) =>{
     //LUIS returns a JSON string as a response, converting it to JSON Object
     if (typeof body === "string") {
         body = JSON.parse(body)
@@ -40,12 +40,9 @@ const done = (err, body, result) =>{
         if (body.entities){
             duplicates = []
             body.entities.forEach(entity => {
-                if (duplicates.indexOf(entity.entity)>-1){
-                    addedKey = count(duplicates, entity.entity)
-                    entities[entity.entity+`-${addedKey}`] = entity.value;
-                } else {
-                    entities[entity.entity] = entity.value;
-                }
+                if (count(duplicates, entity.entity)>0) addedKey= `-${count(duplicates, entity.entity)}`;
+                else addedKey= "";
+                entities[entity.entity+addedKey] = entity.value;
                 duplicates.push(entity.entity)
                 entitiesList.push(entities);
             });
@@ -116,7 +113,7 @@ module.exports = (bot, text, response) => {
  async function promiseWrap(notWrapedFunction, name) {
         return new Promise(resolve => {
             notWrapedFunction(text,(err,body) => {
-                done(null,body,(result) => {
+                parse(null,body,(result) => {
                     console.log(name)
                     resolve(result)
                 })

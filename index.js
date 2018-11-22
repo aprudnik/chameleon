@@ -13,8 +13,8 @@ const verificationControllerSlack = require('./controllers/slackVerification');
 const verificationControllerSkype = require('./controllers/skypeMessage');
 const messageWebhookController = require('./controllers/facebookMessage');
 const discordBot = require('./controllers/discord')
-const getIntents = require('./controllers/pathSelection')
-const awsLex = require('./nl-assistant/awsLex')
+const getIntents = require('./controllers/getIntents')
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -33,11 +33,6 @@ app.get('/changeBot/:bot', (req,res) => {
     const params = req.params
     config.setActiveBot(params.bot);
     res.send('Changed Active Bot to ' + config.active)
-})
-app.post('/aws', (req,res) => {
-    awsLex(req.body.message,function(err,response){
-        res.send(response)
-    })
 })
 
 discordBot
