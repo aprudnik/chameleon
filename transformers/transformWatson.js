@@ -1,6 +1,6 @@
 var AssistantV1 = require('watson-developer-cloud/assistant/v1');
 var config = require('../conf/config')
-const getExamples = require("../controllers/getExamples")
+const getExamples = require("./getExamples")
 
 
 

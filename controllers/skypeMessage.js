@@ -3,7 +3,7 @@ const getIntents = require('./getIntents')
 const dialog = require('./dialog')
 
 const skypeBot = require(`./skypeBot`)
-const { BotFrameworkAdapter, MemoryStorage, ConversationState, UserState } = require('botbuilder');
+const { BotFrameworkAdapter, MemoryStorage, ConversationState} = require('botbuilder');
 
 
 const adapter = new BotFrameworkAdapter({
@@ -12,10 +12,8 @@ const adapter = new BotFrameworkAdapter({
  });
  
 
-
 const memoryStorage = new MemoryStorage();
 conversationState = new ConversationState(memoryStorage);
-userState = new UserState(memoryStorage);
 
 async function getReply(text, userID, callback) {
     await getIntents(config.active, text, async function (err, body){
@@ -28,7 +26,7 @@ async function getReply(text, userID, callback) {
 
 let bot;
 try {
-    bot = new skypeBot(conversationState, userState);
+    bot = new skypeBot(conversationState);
 } catch (err) {
     console.error(`[botInitializationError]: ${err}`);
     process.exit();
@@ -36,7 +34,6 @@ try {
 
 
 module.exports = async function (req, res) {
-    console.log(req.body.from.id)
     getReply(req.body.text, req.body.from.id,  async function (reply) {
         // Route received a request to adapter for processing
         adapter.processActivity(req, res, async (turnContext) => {

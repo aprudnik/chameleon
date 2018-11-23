@@ -12,18 +12,23 @@ client.login(config.discord.token);
 client.on("ready", () => {
     console.log("I am ready!");
 });
+
+async function getReply(text, userID, callback) {
+    await getIntents(config.active, text, async function (err, body){
+        await dialog(body, userID, text, async function(resMessage) {
+            callback(resMessage)
+        })
+    })
+}
+
     
 client.on("message", (message) => {
-    if (message.content.startsWith("!")) {
-        message.content = message.content.substr(1)
-        getIntents(config.active, message.content, function (err, body){
-            console.log("Discord log : ",body)
-            dialog(body, message["author"].id, message.content, resMessage => {message.channel.send(resMessage)})
+    //check if the message was for us
+    if (message.content.startsWith(config.discord.textStart)) {
+        message.content = message.content.substr(config.discord.textStart.length)
+        getReply(message.content, message["author"].id,  async function (reply) {
+            message.channel.send(reply)
         })
     } 
 });
     
-
-module.exports = (text) => {
-    client.channels.get(config.discord.channelId).send(text);
- };

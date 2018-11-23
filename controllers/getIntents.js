@@ -24,7 +24,7 @@ const count = (list, searchTerm) => list.filter((x) => x === searchTerm).length
 const parse = (err, body, result) =>{
     //LUIS returns a JSON string as a response, converting it to JSON Object
     if (typeof body === "string") {
-        body = JSON.parse(body)
+        body = JSON.parse(JSON.stringify(body))
     }
     //Watson json parse
     if (body.intents){
@@ -81,8 +81,12 @@ const parse = (err, body, result) =>{
     if (body.intentName){
         intentList.push(body.intentName)
         if(body.slots){
+            duplicates = []   
             Object.keys(body.slots).forEach( entityName => {
-                entities[entityName] = body.slots[entityName];
+                if (count(duplicates, entityName)>0) addedKey= `-${count(duplicates, entityName)}`;
+                else addedKey= "";
+                entities[allignmentCheck(entityName)+addedKey] = body.slots[entityName];
+                duplicates.push(entityName)
                 entitiesList.push(entities);
             })
         }
@@ -110,7 +114,7 @@ const parse = (err, body, result) =>{
 
 
 module.exports = (bot, text, response) => {
- async function promiseWrap(notWrapedFunction, name) {
+    async function promiseWrap(notWrapedFunction, name) {
         return new Promise(resolve => {
             notWrapedFunction(text,(err,body) => {
                 parse(null,body,(result) => {
@@ -121,14 +125,14 @@ module.exports = (bot, text, response) => {
         })
     }
 
-// Sends received text to NLU engines and waits for the combined result
-async function run() {
-    if (config.active.indexOf("luis") > -1) await promiseWrap(getLuisIntent, "LUIS");
-    if (config.active.indexOf("watson") > -1) await promiseWrap(getWatsonIntent, "Watson")
-    if (config.active.indexOf("aws") > -1) await promiseWrap(getAwsIntent, "aws")
-    intentList = []
-    entities = {}
-    response(null, responseList)
-}
-run ()
+    // Sends received text to NLU engines and waits for the combined result
+    async function run() {
+        if (config.active.indexOf("luis") > -1) await promiseWrap(getLuisIntent, "LUIS");
+        if (config.active.indexOf("watson") > -1) await promiseWrap(getWatsonIntent, "Watson")
+        if (config.active.indexOf("aws") > -1) await promiseWrap(getAwsIntent, "aws")
+        intentList = []
+        entities = {}
+        response(null, responseList)
+    }
+    run ()
 }

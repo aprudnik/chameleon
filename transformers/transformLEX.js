@@ -1,6 +1,6 @@
 var AWS = require('aws-sdk');
 var config = require('../conf/config')
-const getExamples = require("../controllers/getExamples")
+const getExamples = require("./getExamples")
 
 
 initial = getExamples.getJson()

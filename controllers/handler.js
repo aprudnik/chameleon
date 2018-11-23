@@ -1,35 +1,19 @@
 const csv=require('csvtojson')
-const request = require('request');
-const lampCsvFilePath='./knowledgeDB/lamp.csv'
-const kettleCsvFilePath='./knowledgeDB/kettle.csv'
-const hddCsvFilePath='./knowledgeDB/hdd.csv'
 const dbDir = './knowledgeDB/'
 const fs = require('fs');
 
 
-// async function loadData () {
-    
-//     //var lampArray = await csv().fromFile(dbDir)
-//     // var kettleArray = await csv().fromFile(kettleCsvFilePath)
-//     // var hddArray = await csv().fromFile(hddCsvFilePath)
-//     //return lampArray
-
-//     await getCsvPath(async function (json){
-//         //console.log(json)
-//     })
-// }
 
 async function loadData(){
+    //load csv files as JSON objects
     curr = []
     for (fileName of fs.readdirSync(dbDir)) {
         curr.push(await csv().fromFile(dbDir+fileName))
-
         if (fs.readdirSync(dbDir).length == Object.keys(curr).length){
             var merged = [].concat(...curr)
             return merged
         }
     }
-    //return curr
 }
 
 
@@ -41,13 +25,6 @@ Handler.entities = []
 
 const capitalized = ["sys-person"]
 
-async function getCompare(mainList,varList){
-    for (const el of mainList){
-        var index = varList.indexOf(el)
-        if (index > -1) { return el}
-    }
-    return 'None'
-}
 
 async function randomResponse(dialogSet){
     if (Array.isArray(dialogSet.response)){
@@ -94,6 +71,7 @@ function capitalizeFirstLetter(entityName, string) {
 }
 
 async function replaceValues(string,object,dialogSet){
+    // replaces {entityName} placeholders with values
     var reg = /(?<=\{).+?(?=\})/gm;
     var found = string.match(reg)
     newString = string
@@ -107,7 +85,6 @@ async function replaceValues(string,object,dialogSet){
         else {
             var replacement = ""
         }
-
         var newString = newString.replace(`{${value}}`,replacement)
     }
     return newString
@@ -154,6 +131,7 @@ Handler.order = async function (dialogSet, intent, entities, response) {
 }
 
 Handler.search = async function (dialogSet, intent, entities, response) {
+    // if no entities are found, search can't be performed
     if (Object.keys(entities).length == 0) {return dialogSet.failResponse}
     var results = []
     var returnString = await randomResponse(dialogSet)
@@ -161,6 +139,7 @@ Handler.search = async function (dialogSet, intent, entities, response) {
     results = jsonArray
     var removedEntities = {}
     for (const key of Object.keys(entities)){
+        //removing entities that are not searchable
         if ( dialogSet.searchFields.indexOf(key.split("-")[0])==-1){
             removedEntities[key] = entities[key]
             delete entities[key]
@@ -168,27 +147,31 @@ Handler.search = async function (dialogSet, intent, entities, response) {
     }
     for (const entity of Object.keys(entities)) {
         if (entity.indexOf("metrics")>-1) {
+            // if entity is of type "metrics" then we need to get it's numerical value and comparison sign (<, =, >)
             newKey = entity.split("metrics")
             searchField = entities[entity]
             searchValue = removedEntities['sys-number'+newKey[1]]
             curSymb = removedEntities[`comparison`+newKey[1]]
         } else {
+            // if entity is not a metric it's considered a column inside the csv
             searchField = await removeRepeat(entity)
             searchValue = entities[entity]
             curSymb = 'None'
         }
         if (searchValue){
+            // filtering the results for each entity
             console.log(searchField,searchValue,curSymb)
             results = await getDataFromDB(results,searchField,searchValue,curSymb)
         }
     }
     for (const value of results){
+        //prepating response message
         returnString += await jsonToTemplate(value)
         returnString += "\n"
     }
-    //console.log("results: ", results)
     if (results.length == 0) { return dialogSet.failResponse}
     for (const key of Object.keys(entities)){
+        // deleting all entities that are not saved
         if ( dialogSet.entitiesToSave.indexOf(key.split("-")[0])==-1){
             delete entities[key]
         }
@@ -198,9 +181,6 @@ Handler.search = async function (dialogSet, intent, entities, response) {
 
 Handler.response = async function (dialogSet, intent, entities, response){
     text = await randomResponse(dialogSet)
-    // for (const entity of Object.keys(entities)){
-    //     text = text.replace(`{${entity}}`,`${entities[entity]}`)
-    // }
     text = await replaceValues(text,entities, dialogSet)
     return text
 }
